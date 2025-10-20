@@ -16,18 +16,18 @@ const lineData = [
 ];
 
 const barData = [
-  { name: 'Продукт A', sales: 4000 },
-  { name: 'Продукт B', sales: 3000 },
-  { name: 'Продукт C', sales: 2000 },
-  { name: 'Продукт D', sales: 2780 },
-  { name: 'Продукт E', sales: 1890 },
+  { name: 'Кирпич', sales: 4200 },
+  { name: 'Цемент', sales: 3800 },
+  { name: 'Арматура', sales: 2900 },
+  { name: 'Пиломатериалы', sales: 2400 },
+  { name: 'Сухие смеси', sales: 1950 },
 ];
 
 const pieData = [
-  { name: 'Онлайн', value: 45, color: '#0EA5E9' },
-  { name: 'Офлайн', value: 30, color: '#8B5CF6' },
-  { name: 'Партнёры', value: 15, color: '#10B981' },
-  { name: 'Другое', value: 10, color: '#F59E0B' },
+  { name: 'Розница', value: 42, color: '#003d7a' },
+  { name: 'Опт', value: 35, color: '#ff7e1f' },
+  { name: 'Дилеры', value: 15, color: '#0066a1' },
+  { name: 'Онлайн', value: 8, color: '#ffb366' },
 ];
 
 const Index = () => {
@@ -44,21 +44,21 @@ const Index = () => {
   ];
 
   const metrics = [
-    { title: 'Общая выручка', value: '₽2,847,390', change: '+12.5%', trend: 'up', icon: 'TrendingUp' },
-    { title: 'Активных клиентов', value: '1,284', change: '+8.2%', trend: 'up', icon: 'Users' },
-    { title: 'Средний чек', value: '₽4,235', change: '-2.1%', trend: 'down', icon: 'CreditCard' },
-    { title: 'Конверсия', value: '3.24%', change: '+0.4%', trend: 'up', icon: 'Target' },
+    { title: 'Выручка за месяц', value: '₽18,4 млн', change: '+15.3%', trend: 'up', icon: 'TrendingUp' },
+    { title: 'Отгружено тонн', value: '2,847', change: '+8.7%', trend: 'up', icon: 'Package' },
+    { title: 'Активных заказов', value: '184', change: '+12%', trend: 'up', icon: 'ShoppingCart' },
+    { title: 'Клиентов за неделю', value: '457', change: '+5.2%', trend: 'up', icon: 'Users' },
   ];
 
   return (
     <div className="flex min-h-screen bg-background">
-      <aside className="w-64 border-r border-border bg-card">
+      <aside className="w-64 border-r border-sidebar-border bg-sidebar">
         <div className="p-6">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <Icon name="BarChart3" size={24} className="text-white" />
+            <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
+              <Icon name="Package" size={24} className="text-white" />
             </div>
-            <h1 className="text-xl font-semibold">Analytics Pro</h1>
+            <h1 className="text-xl font-bold text-sidebar-foreground">БАУСТОВ</h1>
           </div>
 
           <nav className="space-y-1">
@@ -68,8 +68,8 @@ const Index = () => {
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   activeTab === item.id
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                    ? 'bg-sidebar-primary text-sidebar-primary-foreground shadow-sm'
+                    : 'text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                 }`}
               >
                 <Icon name={item.icon} size={20} />
@@ -120,19 +120,19 @@ const Index = () => {
                 key={index} 
                 className="p-6 hover:shadow-lg transition-all duration-300 animate-fade-in border-l-4"
                 style={{ 
-                  borderLeftColor: index === 0 ? '#0EA5E9' : index === 1 ? '#8B5CF6' : index === 2 ? '#10B981' : '#F59E0B',
+                  borderLeftColor: index === 0 ? '#003d7a' : index === 1 ? '#ff7e1f' : index === 2 ? '#003d7a' : '#ff7e1f',
                   animationDelay: `${index * 100}ms`
                 }}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                    index === 0 ? 'bg-blue-100' : index === 1 ? 'bg-purple-100' : index === 2 ? 'bg-green-100' : 'bg-orange-100'
+                    index === 0 ? 'bg-primary/10' : index === 1 ? 'bg-secondary/10' : index === 2 ? 'bg-primary/10' : 'bg-secondary/10'
                   }`}>
                     <Icon 
                       name={metric.icon} 
                       size={24} 
                       className={
-                        index === 0 ? 'text-blue-600' : index === 1 ? 'text-purple-600' : index === 2 ? 'text-green-600' : 'text-orange-600'
+                        index === 0 ? 'text-primary' : index === 1 ? 'text-secondary' : index === 2 ? 'text-primary' : 'text-secondary'
                       }
                     />
                   </div>
@@ -174,9 +174,9 @@ const Index = () => {
                     }}
                   />
                   <Legend />
-                  <Line type="monotone" dataKey="revenue" stroke="#0EA5E9" strokeWidth={3} name="Доходы" />
+                  <Line type="monotone" dataKey="revenue" stroke="#003d7a" strokeWidth={3} name="Доходы" />
                   <Line type="monotone" dataKey="expenses" stroke="#EF4444" strokeWidth={3} name="Расходы" />
-                  <Line type="monotone" dataKey="profit" stroke="#10B981" strokeWidth={3} name="Прибыль" />
+                  <Line type="monotone" dataKey="profit" stroke="#ff7e1f" strokeWidth={3} name="Прибыль" />
                 </LineChart>
               </ResponsiveContainer>
             </Card>
@@ -184,8 +184,8 @@ const Index = () => {
             <Card className="p-6 animate-fade-in" style={{ animationDelay: '500ms' }}>
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-lg font-semibold">Продажи по продуктам</h3>
-                  <p className="text-sm text-muted-foreground">Топ-5 продуктов месяца</p>
+                  <h3 className="text-lg font-semibold">Продажи по категориям</h3>
+                  <p className="text-sm text-muted-foreground">Топ-5 материалов</p>
                 </div>
                 <Button variant="ghost" size="icon">
                   <Icon name="MoreVertical" size={18} />
@@ -204,7 +204,7 @@ const Index = () => {
                       boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                     }}
                   />
-                  <Bar dataKey="sales" fill="#8B5CF6" radius={[8, 8, 0, 0]} name="Продажи" />
+                  <Bar dataKey="sales" fill="#ff7e1f" radius={[8, 8, 0, 0]} name="Продажи" />
                 </BarChart>
               </ResponsiveContainer>
             </Card>
@@ -214,8 +214,8 @@ const Index = () => {
             <Card className="p-6 animate-fade-in" style={{ animationDelay: '600ms' }}>
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-lg font-semibold">Каналы продаж</h3>
-                  <p className="text-sm text-muted-foreground">Распределение по источникам</p>
+                  <h3 className="text-lg font-semibold">Каналы сбыта</h3>
+                  <p className="text-sm text-muted-foreground">Структура продаж</p>
                 </div>
                 <Button variant="ghost" size="icon">
                   <Icon name="MoreVertical" size={18} />
@@ -264,10 +264,10 @@ const Index = () => {
               </div>
               <div className="space-y-4">
                 {[
-                  { type: 'sale', desc: 'Продажа #12845', amount: '+₽12,500', time: '5 мин назад', status: 'success' },
-                  { type: 'refund', desc: 'Возврат #12834', amount: '-₽3,200', time: '23 мин назад', status: 'warning' },
-                  { type: 'sale', desc: 'Продажа #12843', amount: '+₽8,900', time: '1 час назад', status: 'success' },
-                  { type: 'sale', desc: 'Продажа #12841', amount: '+₽15,400', time: '2 часа назад', status: 'success' },
+                  { type: 'sale', desc: 'Заказ #ЗК-2845 - Кирпич М150', amount: '+₽142,500', time: '8 мин назад', status: 'success' },
+                  { type: 'sale', desc: 'Заказ #ЗК-2843 - Цемент ПЦ500', amount: '+₽89,300', time: '45 мин назад', status: 'success' },
+                  { type: 'refund', desc: 'Возврат #ЗК-2811', amount: '-₽23,400', time: '2 часа назад', status: 'warning' },
+                  { type: 'sale', desc: 'Заказ #ЗК-2840 - Арматура 12мм', amount: '+₽215,800', time: '3 часа назад', status: 'success' },
                 ].map((transaction, index) => (
                   <div key={index} className="flex items-center justify-between p-4 rounded-lg hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-4">
