@@ -49,18 +49,52 @@ const Index = () => {
   const [notifications, setNotifications] = useState(3);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<any>(null);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   
   const openModal = (content: any) => {
     setModalContent(content);
     setModalOpen(true);
   };
 
+  const categories = [
+    { id: 'all', label: 'Все материалы', icon: 'Grid3x3' },
+    { id: 'insulation', label: 'Утеплитель', icon: 'Home' },
+    { id: 'waterproofing', label: 'Гидроизоляция', icon: 'Droplet' },
+    { id: 'roofing', label: 'Плоская кровля', icon: 'Building2' },
+    { id: 'facade', label: 'Фасадные системы', icon: 'Layers' },
+    { id: 'geosynthetics', label: 'Геосинтетика', icon: 'Map' },
+    { id: 'soundproofing', label: 'Звукоизоляция', icon: 'Volume2' },
+  ];
+
+  const products = [
+    { id: 1, name: 'ROCKWOOL Лайт Баттс Скандик', category: 'insulation', price: '₽2,850/м²', stock: 12450, rating: 4.8, image: '🏗️', brand: 'ROCKWOOL', specs: '1000×600×50 мм' },
+    { id: 2, name: 'ТЕХНОНИКОЛЬ Техноэласт ЭПП', category: 'waterproofing', price: '₽3,200/м²', stock: 8340, rating: 4.9, image: '💧', brand: 'ТЕХНОНИКОЛЬ', specs: 'Рулон 10×1 м' },
+    { id: 3, name: 'LOGICPIR Балкон', category: 'insulation', price: '₽1,950/м²', stock: 15600, rating: 4.7, image: '🏗️', brand: 'ТЕХНОНИКОЛЬ', specs: '1185×585×30 мм' },
+    { id: 4, name: 'Гидроизоляция Филизол Стандарт', category: 'waterproofing', price: '₽1,450/м²', stock: 9870, rating: 4.6, image: '💧', brand: 'Филизол', specs: 'Рулон 15×1 м' },
+    { id: 5, name: 'ПВХ мембрана LOGICROOF V-RP', category: 'roofing', price: '₽4,500/м²', stock: 6230, rating: 4.9, image: '🏢', brand: 'ТЕХНОНИКОЛЬ', specs: '2.05×20 м' },
+    { id: 6, name: 'Фасадные панели Hauberk', category: 'facade', price: '₽2,100/м²', stock: 11200, rating: 4.8, image: '🧱', brand: 'ТЕХНОНИКОЛЬ', specs: '1000×250 мм' },
+    { id: 7, name: 'Геотекстиль Дорнит 200', category: 'geosynthetics', price: '₽45/м²', stock: 28900, rating: 4.5, image: '🗺️', brand: 'Дорнит', specs: 'Рулон 50×2.2 м' },
+    { id: 8, name: 'ROCKWOOL Акустик Баттс', category: 'soundproofing', price: '₽3,400/м²', stock: 7650, rating: 4.9, image: '🔇', brand: 'ROCKWOOL', specs: '1000×600×50 мм' },
+    { id: 9, name: 'Базальтовая вата ISOVER', category: 'insulation', price: '₽2,200/м²', stock: 14300, rating: 4.6, image: '🏗️', brand: 'ISOVER', specs: '1170×610×50 мм' },
+    { id: 10, name: 'Мастика битумная AquaMast', category: 'waterproofing', price: '₽890/м²', stock: 18400, rating: 4.4, image: '💧', brand: 'ТЕХНОНИКОЛЬ', specs: 'Ведро 18 кг' },
+    { id: 11, name: 'Фасадная система Ceresit', category: 'facade', price: '₽5,200/м²', stock: 4580, rating: 4.8, image: '🧱', brand: 'Ceresit', specs: 'Комплект' },
+    { id: 12, name: 'Геомембрана LDPE', category: 'geosynthetics', price: '₽320/м²', stock: 22100, rating: 4.7, image: '🗺️', brand: 'Solmax', specs: 'Рулон 50×7 м' },
+  ];
+
+  const filteredProducts = products.filter(product => {
+    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          product.brand.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
   const menuItems = [
     { id: 'dashboard', label: 'Дашборд', icon: 'LayoutDashboard' },
+    { id: 'catalog', label: 'Каталог', icon: 'Grid3x3' },
     { id: 'reports', label: 'Отчёты', icon: 'FileText' },
     { id: 'analytics', label: 'Аналитика', icon: 'TrendingUp' },
     { id: 'settings', label: 'Настройки', icon: 'Settings' },
-    { id: 'export', label: 'Экспорт', icon: 'Download' },
     { id: 'history', label: 'История', icon: 'Clock' },
   ];
 
@@ -171,6 +205,98 @@ const Index = () => {
         </header>
 
         <div className="p-8">
+          {activeTab === 'catalog' ? (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold">Каталог материалов</h2>
+                  <p className="text-sm text-muted-foreground mt-1">Выберите категорию и найдите нужный товар</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <Icon name="Search" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                    <input
+                      type="text"
+                      placeholder="Поиск материалов..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10 pr-4 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring w-64"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
+                      selectedCategory === cat.id
+                        ? 'bg-primary text-primary-foreground shadow-md'
+                        : 'bg-card border border-border hover:border-primary/50'
+                    }`}
+                  >
+                    <Icon name={cat.icon} size={18} />
+                    <span className="text-sm font-medium">{cat.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {filteredProducts.map((product) => (
+                  <Card 
+                    key={product.id} 
+                    className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                    onClick={() => openModal({ type: 'product', product })}
+                  >
+                    <div className="aspect-square bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform">
+                      {product.image}
+                    </div>
+                    <div className="p-4 space-y-3">
+                      <div>
+                        <p className="text-xs text-primary font-semibold">{product.brand}</p>
+                        <h3 className="font-semibold text-sm mt-1 line-clamp-2 min-h-[2.5rem]">{product.name}</h3>
+                      </div>
+                      
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Icon 
+                            key={i} 
+                            name="Star" 
+                            size={14} 
+                            className={i < Math.floor(product.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
+                          />
+                        ))}
+                        <span className="text-xs text-muted-foreground ml-1">({product.rating})</span>
+                      </div>
+
+                      <div className="pt-2 border-t border-border">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-lg font-bold text-primary">{product.price}</p>
+                            <p className="text-xs text-muted-foreground">В наличии: {product.stock.toLocaleString()} м²</p>
+                          </div>
+                          <Button size="sm" className="group-hover:bg-primary group-hover:text-primary-foreground">
+                            <Icon name="ShoppingCart" size={16} />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              {filteredProducts.length === 0 && (
+                <Card className="p-12 text-center">
+                  <Icon name="PackageX" size={64} className="mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">Товары не найдены</h3>
+                  <p className="text-muted-foreground">Попробуйте изменить фильтры или поисковый запрос</p>
+                </Card>
+              )}
+            </div>
+          ) : (
+            <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {metrics.map((metric, index) => (
               <Card 
@@ -454,6 +580,8 @@ const Index = () => {
               </div>
             </Card>
           </div>
+            </>
+          )}
         </div>
       </main>
 
@@ -689,6 +817,106 @@ const Index = () => {
                       Включить прогнозы
                     </label>
                   </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {modalContent?.type === 'product' && modalContent.product && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-3">
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center text-4xl">
+                    {modalContent.product.image}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm text-primary font-semibold">{modalContent.product.brand}</p>
+                    <h3 className="text-xl font-bold mt-1">{modalContent.product.name}</h3>
+                  </div>
+                </DialogTitle>
+                <DialogDescription>
+                  Детальная информация о товаре
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-6 mt-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <Card className="p-4 bg-primary/5">
+                    <p className="text-sm text-muted-foreground mb-1">Цена</p>
+                    <p className="text-2xl font-bold text-primary">{modalContent.product.price}</p>
+                  </Card>
+                  <Card className="p-4 bg-green-50">
+                    <p className="text-sm text-muted-foreground mb-1">В наличии</p>
+                    <p className="text-2xl font-bold text-green-600">{modalContent.product.stock.toLocaleString()} м²</p>
+                  </Card>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Icon 
+                        key={i} 
+                        name="Star" 
+                        size={20} 
+                        className={i < Math.floor(modalContent.product.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-lg font-semibold">{modalContent.product.rating}</span>
+                  <span className="text-sm text-muted-foreground">(248 отзывов)</span>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-3">
+                  <h4 className="font-semibold">Характеристики</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between p-3 bg-muted/50 rounded">
+                      <span className="text-sm text-muted-foreground">Размеры</span>
+                      <span className="text-sm font-semibold">{modalContent.product.specs}</span>
+                    </div>
+                    <div className="flex justify-between p-3 bg-muted/50 rounded">
+                      <span className="text-sm text-muted-foreground">Бренд</span>
+                      <span className="text-sm font-semibold">{modalContent.product.brand}</span>
+                    </div>
+                    <div className="flex justify-between p-3 bg-muted/50 rounded">
+                      <span className="text-sm text-muted-foreground">Категория</span>
+                      <span className="text-sm font-semibold">
+                        {categories.find(c => c.id === modalContent.product.category)?.label || 'Не указана'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-3">
+                  <h4 className="font-semibold">Количество</h4>
+                  <div className="flex items-center gap-3">
+                    <Button variant="outline" size="icon">
+                      <Icon name="Minus" size={18} />
+                    </Button>
+                    <input 
+                      type="number" 
+                      defaultValue="1" 
+                      min="1"
+                      className="w-24 text-center border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                    />
+                    <Button variant="outline" size="icon">
+                      <Icon name="Plus" size={18} />
+                    </Button>
+                    <span className="text-sm text-muted-foreground ml-2">м²</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button className="flex-1" size="lg">
+                    <Icon name="ShoppingCart" size={20} className="mr-2" />
+                    Добавить в корзину
+                  </Button>
+                  <Button variant="outline" size="lg">
+                    <Icon name="Heart" size={20} />
+                  </Button>
                 </div>
               </div>
             </>
