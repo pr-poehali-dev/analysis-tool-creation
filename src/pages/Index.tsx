@@ -269,6 +269,7 @@ const Index = () => {
     { id: 'dashboard', label: 'Дашборд', icon: 'LayoutDashboard' },
     { id: 'catalog', label: 'Каталог', icon: 'Grid3x3' },
     { id: 'orders', label: 'Заказы', icon: 'ShoppingBag' },
+    { id: 'logistics', label: 'Логистика', icon: 'Truck' },
     { id: 'crm', label: 'CRM', icon: 'Users' },
     { id: 'marketing', label: 'Маркетинг', icon: 'Megaphone' },
     { id: 'analytics', label: 'Аналитика', icon: 'TrendingUp' },
@@ -518,6 +519,147 @@ const Index = () => {
         { name: 'LOGICROOF V-RP', quantity: 95, price: 4500, discount: 0 },
         { name: 'Гидроизоляция ТЕХНОНИКОЛЬ', quantity: 65, price: 3200, discount: 15 }
       ]
+    }
+  ];
+
+  const deliveries = [
+    {
+      id: 1,
+      orderId: 'ЗК-2850',
+      driver: 'Смирнов П.А.',
+      vehicle: 'МАЗ-5440 (А123БВ777)',
+      route: 'Склад → ул. Строителей, 15',
+      status: 'completed',
+      distance: 12.5,
+      eta: '2024-10-19 15:30',
+      departTime: '2024-10-19 14:00',
+      arriveTime: '2024-10-19 15:30',
+      customer: 'ООО "СтройТех"',
+      address: 'Москва, ул. Строителей, д. 15',
+      phone: '+7 (495) 123-45-67',
+      items: [
+        { name: 'Гидроизоляция ТЕХНОНИКОЛЬ', quantity: 38, weight: 760, pallets: 2 },
+        { name: 'Утеплитель ROCKWOOL', quantity: 120, weight: 1200, pallets: 5 }
+      ],
+      totalWeight: 1960,
+      totalPallets: 7,
+      documents: ['Накладная', 'ТТН', 'УПД']
+    },
+    {
+      id: 2,
+      orderId: 'ЗК-2851',
+      driver: 'Козлов В.И.',
+      vehicle: 'КАМАЗ-65117 (В456ГД123)',
+      route: 'Склад → Ленинский пр-т, 45 → ул. Садовая, 8',
+      status: 'in-transit',
+      distance: 28.3,
+      eta: '2024-10-20 11:45',
+      departTime: '2024-10-20 09:00',
+      arriveTime: null,
+      customer: 'ООО "МонолитСтрой"',
+      address: 'Москва, Ленинский пр-т, д. 45',
+      phone: '+7 (499) 234-56-78',
+      items: [
+        { name: 'LOGICROOF V-RP', quantity: 95, weight: 1900, pallets: 8 },
+        { name: 'Гидроизоляция', quantity: 65, weight: 650, pallets: 3 }
+      ],
+      totalWeight: 2550,
+      totalPallets: 11,
+      documents: ['Накладная', 'ТТН']
+    },
+    {
+      id: 3,
+      orderId: 'ЗК-2852',
+      driver: 'Новиков А.С.',
+      vehicle: 'MAN TGX (С789ЕЖ456)',
+      route: 'Склад → Московская обл., Подольск',
+      status: 'scheduled',
+      distance: 45.2,
+      eta: '2024-10-21 14:00',
+      departTime: '2024-10-21 11:00',
+      arriveTime: null,
+      customer: 'ИП Петров А.С.',
+      address: 'Московская обл., Подольск, ул. Промышленная, 12',
+      phone: '+7 (926) 345-67-89',
+      items: [
+        { name: 'Звукоизоляция ROCKWOOL', quantity: 85, weight: 1020, pallets: 4 },
+        { name: 'Геотекстиль', quantity: 280, weight: 420, pallets: 2 }
+      ],
+      totalWeight: 1440,
+      totalPallets: 6,
+      documents: ['Накладная', 'ТТН', 'УПД']
+    }
+  ];
+
+  const drivers = [
+    {
+      id: 1,
+      name: 'Смирнов П.А.',
+      phone: '+7 (916) 111-22-33',
+      vehicle: 'МАЗ-5440 (А123БВ777)',
+      status: 'available',
+      currentLoad: 0,
+      todayDeliveries: 3,
+      completedDeliveries: 156,
+      rating: 4.9,
+      experience: '12 лет'
+    },
+    {
+      id: 2,
+      name: 'Козлов В.И.',
+      phone: '+7 (916) 222-33-44',
+      vehicle: 'КАМАЗ-65117 (В456ГД123)',
+      status: 'on-route',
+      currentLoad: 2550,
+      todayDeliveries: 2,
+      completedDeliveries: 203,
+      rating: 4.8,
+      experience: '15 лет'
+    },
+    {
+      id: 3,
+      name: 'Новиков А.С.',
+      phone: '+7 (916) 333-44-55',
+      vehicle: 'MAN TGX (С789ЕЖ456)',
+      status: 'scheduled',
+      currentLoad: 1440,
+      todayDeliveries: 1,
+      completedDeliveries: 89,
+      rating: 4.7,
+      experience: '7 лет'
+    }
+  ];
+
+  const transportCompanies = [
+    {
+      id: 1,
+      name: 'СДЭК',
+      logo: '📦',
+      tariff: 'Экспресс',
+      deliveryTime: '1-2 дня',
+      cost: 850,
+      tracking: 'CDEK-2024-1234567',
+      status: 'active'
+    },
+    {
+      id: 2,
+      name: 'Деловые Линии',
+      logo: '🚚',
+      tariff: 'Терминал-Терминал',
+      deliveryTime: '3-5 дней',
+      cost: 650,
+      tracking: 'DL-98765432',
+      status: 'active'
+    },
+    {
+      id: 3,
+      name: 'ПЭК',
+      logo: '🚛',
+      tariff: 'Стандарт',
+      deliveryTime: '4-7 дней',
+      cost: 550,
+      tracking: null,
+      status: 'available'
     }
   ];
 
@@ -2751,6 +2893,459 @@ const Index = () => {
                     <Icon name="Plus" size={24} className="mr-2" />
                     Создать коммерческое предложение
                   </Button>
+                </TabsContent>
+              </Tabs>
+            </div>
+          ) : activeTab === 'logistics' ? (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-3xl font-bold text-primary">Логистика и доставка</h2>
+                <Button className="bg-primary hover:bg-primary/90">
+                  <Icon name="Plus" size={20} className="mr-2" />
+                  Новая доставка
+                </Button>
+              </div>
+
+              <Tabs defaultValue="routes" className="w-full">
+                <TabsList className="grid w-full grid-cols-4 mb-6">
+                  <TabsTrigger value="routes">
+                    <Icon name="Map" size={18} className="mr-2" />
+                    Маршруты
+                  </TabsTrigger>
+                  <TabsTrigger value="drivers">
+                    <Icon name="User" size={18} className="mr-2" />
+                    Водители
+                  </TabsTrigger>
+                  <TabsTrigger value="documents">
+                    <Icon name="FileText" size={18} className="mr-2" />
+                    Документы
+                  </TabsTrigger>
+                  <TabsTrigger value="transport">
+                    <Icon name="Package" size={18} className="mr-2" />
+                    ТК (СДЭК, ДЛ)
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="routes" className="space-y-4">
+                  <div className="grid md:grid-cols-4 gap-4 mb-6">
+                    <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-green-600 mb-1">Доставлено</p>
+                          <p className="text-3xl font-bold text-green-700">{deliveries.filter(d => d.status === 'completed').length}</p>
+                        </div>
+                        <Icon name="CheckCircle" size={28} className="text-green-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-blue-600 mb-1">В пути</p>
+                          <p className="text-3xl font-bold text-blue-700">{deliveries.filter(d => d.status === 'in-transit').length}</p>
+                        </div>
+                        <Icon name="Truck" size={28} className="text-blue-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-orange-600 mb-1">Запланировано</p>
+                          <p className="text-3xl font-bold text-orange-700">{deliveries.filter(d => d.status === 'scheduled').length}</p>
+                        </div>
+                        <Icon name="Calendar" size={28} className="text-orange-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-purple-600 mb-1">Общий груз</p>
+                          <p className="text-2xl font-bold text-purple-700">{deliveries.reduce((sum, d) => sum + d.totalWeight, 0) / 1000}т</p>
+                        </div>
+                        <Icon name="Weight" size={28} className="text-purple-600" />
+                      </div>
+                    </Card>
+                  </div>
+
+                  <Card className="p-6 bg-gradient-to-br from-blue-600 to-blue-800 text-white mb-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-2xl font-bold mb-2">Планировщик доставок на карте</h3>
+                        <p className="text-blue-100">Оптимизация маршрутов и отслеживание в реальном времени</p>
+                      </div>
+                      <Icon name="MapPin" size={64} className="opacity-20" />
+                    </div>
+                  </Card>
+
+                  <div className="bg-gray-100 rounded-xl p-8 mb-6 text-center">
+                    <div className="text-6xl mb-4">🗺️</div>
+                    <h3 className="text-xl font-bold text-gray-700 mb-2">Интерактивная карта маршрутов</h3>
+                    <p className="text-gray-600 mb-4">Здесь будет интеграция с Яндекс.Картами для визуализации маршрутов</p>
+                    <div className="grid md:grid-cols-3 gap-4 mt-6">
+                      <div className="bg-white p-4 rounded-lg">
+                        <div className="text-2xl mb-2">📍</div>
+                        <p className="text-sm font-semibold">Точки доставки</p>
+                        <p className="text-xs text-gray-500">Отметки на карте</p>
+                      </div>
+                      <div className="bg-white p-4 rounded-lg">
+                        <div className="text-2xl mb-2">🛣️</div>
+                        <p className="text-sm font-semibold">Оптимальный маршрут</p>
+                        <p className="text-xs text-gray-500">Расчёт расстояния</p>
+                      </div>
+                      <div className="bg-white p-4 rounded-lg">
+                        <div className="text-2xl mb-2">⏱️</div>
+                        <p className="text-sm font-semibold">Время в пути</p>
+                        <p className="text-xs text-gray-500">Учёт пробок</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-primary mb-4">Активные доставки</h3>
+                  <div className="grid gap-4">
+                    {deliveries.map((delivery) => (
+                      <Card key={delivery.id} className={`p-6 hover:shadow-lg transition-shadow border-l-4 ${
+                        delivery.status === 'completed' ? 'border-green-500' :
+                        delivery.status === 'in-transit' ? 'border-blue-500' : 'border-orange-500'
+                      }`}>
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-3">
+                              <h3 className="text-xl font-bold text-primary">Доставка #{delivery.orderId}</h3>
+                              <Badge className={
+                                delivery.status === 'completed' ? 'bg-green-100 text-green-700 border-green-300' :
+                                delivery.status === 'in-transit' ? 'bg-blue-100 text-blue-700 border-blue-300' :
+                                'bg-orange-100 text-orange-700 border-orange-300'
+                              }>
+                                {delivery.status === 'completed' ? 'Доставлено' : 
+                                 delivery.status === 'in-transit' ? 'В пути' : 'Запланировано'}
+                              </Badge>
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-4 mb-3">
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">Водитель и транспорт</p>
+                                <p className="font-semibold flex items-center gap-2">
+                                  <Icon name="User" size={16} />
+                                  {delivery.driver}
+                                </p>
+                                <p className="text-sm text-gray-600">{delivery.vehicle}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">Клиент</p>
+                                <p className="font-semibold flex items-center gap-2">
+                                  <Icon name="Building2" size={16} />
+                                  {delivery.customer}
+                                </p>
+                                <p className="text-sm text-gray-600">{delivery.phone}</p>
+                              </div>
+                            </div>
+                            <div className="bg-blue-50 rounded-lg p-3 mb-3">
+                              <p className="text-sm text-gray-600 mb-1 flex items-center gap-2">
+                                <Icon name="MapPin" size={16} className="text-blue-600" />
+                                Маршрут:
+                              </p>
+                              <p className="font-semibold text-blue-700">{delivery.route}</p>
+                              <div className="grid grid-cols-3 gap-3 mt-2 text-sm">
+                                <div>
+                                  <span className="text-gray-500">Расстояние:</span>
+                                  <span className="font-semibold ml-1">{delivery.distance} км</span>
+                                </div>
+                                <div>
+                                  <span className="text-gray-500">Выезд:</span>
+                                  <span className="font-semibold ml-1">{delivery.departTime.split(' ')[1]}</span>
+                                </div>
+                                <div>
+                                  <span className="text-gray-500">Прибытие:</span>
+                                  <span className="font-semibold ml-1">{delivery.eta.split(' ')[1]}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="grid md:grid-cols-3 gap-3">
+                              <div className="bg-gray-50 rounded-lg p-3">
+                                <p className="text-xs text-gray-500 mb-1">Груз</p>
+                                <p className="font-bold text-lg">{delivery.totalWeight} кг</p>
+                              </div>
+                              <div className="bg-gray-50 rounded-lg p-3">
+                                <p className="text-xs text-gray-500 mb-1">Паллеты</p>
+                                <p className="font-bold text-lg">{delivery.totalPallets} шт</p>
+                              </div>
+                              <div className="bg-gray-50 rounded-lg p-3">
+                                <p className="text-xs text-gray-500 mb-1">Позиции</p>
+                                <p className="font-bold text-lg">{delivery.items.length}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right ml-6">
+                            <div className="flex flex-col gap-2 mb-4">
+                              <Button variant="outline" size="sm">
+                                <Icon name="MapPin" size={16} className="mr-1" />
+                                На карте
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Icon name="Phone" size={16} className="mr-1" />
+                                Связаться
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Icon name="FileText" size={16} className="mr-1" />
+                                Документы
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                        <Separator className="my-3" />
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm">
+                            <span className="text-gray-500">Документы:</span>
+                            <div className="flex gap-2 mt-1">
+                              {delivery.documents.map((doc, idx) => (
+                                <Badge key={idx} variant="outline" className="text-xs">
+                                  {doc}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                          {delivery.status === 'in-transit' && (
+                            <div className="flex items-center gap-2 text-blue-600">
+                              <div className="animate-pulse w-2 h-2 bg-blue-600 rounded-full"></div>
+                              <span className="text-sm font-semibold">Отслеживание активно</span>
+                            </div>
+                          )}
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="drivers" className="space-y-4">
+                  <div className="grid md:grid-cols-3 gap-6">
+                    {drivers.map((driver) => (
+                      <Card key={driver.id} className="p-6 hover:shadow-lg transition-shadow">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-3xl">
+                              🚚
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-bold text-primary">{driver.name}</h3>
+                              <p className="text-sm text-gray-600">{driver.phone}</p>
+                            </div>
+                          </div>
+                          <Badge className={
+                            driver.status === 'available' ? 'bg-green-100 text-green-700 border-green-300' :
+                            driver.status === 'on-route' ? 'bg-blue-100 text-blue-700 border-blue-300' :
+                            'bg-orange-100 text-orange-700 border-orange-300'
+                          }>
+                            {driver.status === 'available' ? 'Свободен' : 
+                             driver.status === 'on-route' ? 'На маршруте' : 'Запланировано'}
+                          </Badge>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                          <p className="text-sm font-semibold text-gray-700 mb-1">{driver.vehicle}</p>
+                          <p className="text-xs text-gray-500">Текущая загрузка: {driver.currentLoad} кг</p>
+                        </div>
+                        <div className="space-y-2 mb-4">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600">Сегодня доставок:</span>
+                            <span className="font-bold">{driver.todayDeliveries}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600">Всего выполнено:</span>
+                            <span className="font-bold">{driver.completedDeliveries}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600">Опыт работы:</span>
+                            <span className="font-bold">{driver.experience}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600">Рейтинг:</span>
+                            <span className="font-bold text-orange-600 flex items-center gap-1">
+                              <Icon name="Star" size={14} className="fill-orange-600" />
+                              {driver.rating}
+                            </span>
+                          </div>
+                        </div>
+                        <Button className="w-full bg-primary hover:bg-primary/90">
+                          <Icon name="MapPin" size={16} className="mr-2" />
+                          Назначить доставку
+                        </Button>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="documents" className="space-y-4">
+                  <Card className="p-6 bg-gradient-to-br from-indigo-600 to-indigo-800 text-white mb-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-2xl font-bold mb-2">Автоматическая генерация документов</h3>
+                        <p className="text-indigo-100">Накладные, ТТН, УПД для каждой отгрузки</p>
+                      </div>
+                      <Icon name="FileText" size={64} className="opacity-20" />
+                    </div>
+                  </Card>
+
+                  <div className="grid md:grid-cols-3 gap-4 mb-6">
+                    <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-blue-600 mb-1">Накладные</p>
+                          <p className="text-3xl font-bold text-blue-700">
+                            {deliveries.reduce((sum, d) => sum + (d.documents.includes('Накладная') ? 1 : 0), 0)}
+                          </p>
+                        </div>
+                        <Icon name="FileText" size={28} className="text-blue-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-green-600 mb-1">ТТН</p>
+                          <p className="text-3xl font-bold text-green-700">
+                            {deliveries.reduce((sum, d) => sum + (d.documents.includes('ТТН') ? 1 : 0), 0)}
+                          </p>
+                        </div>
+                        <Icon name="Truck" size={28} className="text-green-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-purple-600 mb-1">УПД</p>
+                          <p className="text-3xl font-bold text-purple-700">
+                            {deliveries.reduce((sum, d) => sum + (d.documents.includes('УПД') ? 1 : 0), 0)}
+                          </p>
+                        </div>
+                        <Icon name="FileCheck" size={28} className="text-purple-600" />
+                      </div>
+                    </Card>
+                  </div>
+
+                  <div className="grid gap-4">
+                    {deliveries.map((delivery) => (
+                      <Card key={delivery.id} className="p-6 hover:shadow-lg transition-shadow">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-3">
+                              <h3 className="text-xl font-bold text-primary">Заказ {delivery.orderId}</h3>
+                              <Badge className="bg-blue-100 text-blue-700 border-blue-300">
+                                {delivery.customer}
+                              </Badge>
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-4 mb-3">
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">Адрес доставки</p>
+                                <p className="font-semibold text-gray-700">{delivery.address}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-500 mb-1">Дата отгрузки</p>
+                                <p className="font-semibold text-gray-700">{delivery.departTime}</p>
+                              </div>
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                              <h4 className="font-semibold text-gray-700 mb-2">Позиции в накладной:</h4>
+                              {delivery.items.map((item, idx) => (
+                                <div key={idx} className="flex items-center justify-between text-sm py-2 border-b border-gray-200 last:border-0">
+                                  <span className="flex-1">{item.name}</span>
+                                  <span className="text-gray-600 mx-4">{item.quantity} шт</span>
+                                  <span className="text-gray-600 mx-4">{item.weight} кг</span>
+                                  <span className="font-semibold">{item.pallets} палл.</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="text-right ml-6">
+                            <p className="text-sm text-gray-500 mb-3">Документы для скачивания:</p>
+                            <div className="flex flex-col gap-2">
+                              {delivery.documents.map((doc, idx) => (
+                                <Button key={idx} variant="outline" size="sm">
+                                  <Icon name="Download" size={16} className="mr-1" />
+                                  {doc}
+                                </Button>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="transport" className="space-y-4">
+                  <Card className="p-6 bg-gradient-to-br from-orange-600 to-orange-800 text-white mb-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-2xl font-bold mb-2">Интеграция с транспортными компаниями</h3>
+                        <p className="text-orange-100">СДЭК, Деловые Линии, ПЭК для межгорода</p>
+                      </div>
+                      <Icon name="Package" size={64} className="opacity-20" />
+                    </div>
+                  </Card>
+
+                  <div className="grid md:grid-cols-3 gap-6">
+                    {transportCompanies.map((company) => (
+                      <Card key={company.id} className="p-6 hover:shadow-lg transition-shadow">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <div className="text-5xl">{company.logo}</div>
+                            <div>
+                              <h3 className="text-xl font-bold text-primary">{company.name}</h3>
+                              <p className="text-sm text-gray-600">{company.tariff}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <Separator className="my-4" />
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <span className="text-sm text-gray-700">Срок доставки</span>
+                            <span className="font-bold text-blue-600">{company.deliveryTime}</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <span className="text-sm text-gray-700">Стоимость</span>
+                            <span className="font-bold text-green-600">₽{company.cost}</span>
+                          </div>
+                          {company.tracking && (
+                            <div className="p-3 bg-orange-50 rounded-lg">
+                              <p className="text-xs text-gray-600 mb-1">Трек-номер:</p>
+                              <p className="font-mono text-sm font-bold text-orange-700">{company.tracking}</p>
+                            </div>
+                          )}
+                          <Badge className={
+                            company.status === 'active' ? 'bg-green-100 text-green-700 border-green-300 w-full justify-center' :
+                            'bg-gray-100 text-gray-700 border-gray-300 w-full justify-center'
+                          }>
+                            {company.status === 'active' ? 'Активна отправка' : 'Доступна'}
+                          </Badge>
+                        </div>
+                        <Button className="w-full mt-4 bg-primary hover:bg-primary/90">
+                          <Icon name="Plus" size={16} className="mr-2" />
+                          Создать заявку
+                        </Button>
+                      </Card>
+                    ))}
+                  </div>
+
+                  <Card className="p-6 bg-blue-50 border-blue-200 mt-6">
+                    <h4 className="font-bold text-primary mb-3 flex items-center gap-2">
+                      <Icon name="Info" size={20} />
+                      Возможности интеграции
+                    </h4>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li className="flex items-start gap-2">
+                        <Icon name="CheckCircle" size={16} className="text-green-600 mt-0.5" />
+                        <span>Автоматический расчёт стоимости доставки по API</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Icon name="CheckCircle" size={16} className="text-green-600 mt-0.5" />
+                        <span>Создание заявок на отправку через личный кабинет ТК</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Icon name="CheckCircle" size={16} className="text-green-600 mt-0.5" />
+                        <span>Отслеживание статуса доставки в реальном времени</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Icon name="CheckCircle" size={16} className="text-green-600 mt-0.5" />
+                        <span>Печать этикеток и документов напрямую из системы</span>
+                      </li>
+                    </ul>
+                  </Card>
                 </TabsContent>
               </Tabs>
             </div>
