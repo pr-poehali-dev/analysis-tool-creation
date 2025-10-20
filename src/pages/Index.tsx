@@ -269,6 +269,7 @@ const Index = () => {
     { id: 'dashboard', label: 'Дашборд', icon: 'LayoutDashboard' },
     { id: 'catalog', label: 'Каталог', icon: 'Grid3x3' },
     { id: 'orders', label: 'Заказы', icon: 'ShoppingBag' },
+    { id: 'crm', label: 'CRM', icon: 'Users' },
     { id: 'marketing', label: 'Маркетинг', icon: 'Megaphone' },
     { id: 'analytics', label: 'Аналитика', icon: 'TrendingUp' },
     { id: 'finance', label: 'Финансы', icon: 'Wallet' },
@@ -278,12 +279,246 @@ const Index = () => {
   ];
 
   const topCustomers = [
-    { name: 'ООО "СтройТех"', purchases: 3450000, orders: 28, growth: '+15.3%', status: 'vip', loyaltyPoints: 34500, tier: 'Платина' },
-    { name: 'ООО "МонолитСтрой"', purchases: 2890000, orders: 22, growth: '+22.8%', status: 'vip', loyaltyPoints: 28900, tier: 'Платина' },
-    { name: 'ИП Петров А.С.', purchases: 1650000, orders: 35, growth: '+8.5%', status: 'regular', loyaltyPoints: 16500, tier: 'Золото' },
-    { name: 'ООО "ГлавСтрой"', purchases: 1480000, orders: 18, growth: '+12.1%', status: 'regular', loyaltyPoints: 14800, tier: 'Золото' },
-    { name: 'ООО "Базис"', purchases: 1320000, orders: 24, growth: '+19.4%', status: 'regular', loyaltyPoints: 13200, tier: 'Серебро' },
-    { name: 'ИП Сидоров В.М.', purchases: 980000, orders: 16, growth: '+5.2%', status: 'regular', loyaltyPoints: 9800, tier: 'Серебро' },
+    { 
+      id: 1,
+      name: 'ООО "СтройТех"', 
+      purchases: 3450000, 
+      orders: 28, 
+      growth: '+15.3%', 
+      status: 'vip', 
+      loyaltyPoints: 34500, 
+      tier: 'Платина',
+      manager: 'Иванов И.И.',
+      phone: '+7 (495) 123-45-67',
+      email: 'info@stroyteh.ru',
+      lastContact: '2024-10-18',
+      nextTask: 'Отправить КП на фасадные системы',
+      taskDate: '2024-10-21',
+      source: 'Реклама Яндекс',
+      tags: ['VIP', 'Опт', 'Постоянный']
+    },
+    { 
+      id: 2,
+      name: 'ООО "МонолитСтрой"', 
+      purchases: 2890000, 
+      orders: 22, 
+      growth: '+22.8%', 
+      status: 'vip', 
+      loyaltyPoints: 28900, 
+      tier: 'Платина',
+      manager: 'Петрова А.С.',
+      phone: '+7 (499) 234-56-78',
+      email: 'zakaz@monolitstroy.ru',
+      lastContact: '2024-10-17',
+      nextTask: 'Перезвонить по новому заказу',
+      taskDate: '2024-10-20',
+      source: 'Рекомендация',
+      tags: ['VIP', 'Строительство', 'Быстрая оплата']
+    },
+    { 
+      id: 3,
+      name: 'ИП Петров А.С.', 
+      purchases: 1650000, 
+      orders: 35, 
+      growth: '+8.5%', 
+      status: 'regular', 
+      loyaltyPoints: 16500, 
+      tier: 'Золото',
+      manager: 'Сидоров В.М.',
+      phone: '+7 (926) 345-67-89',
+      email: 'petrov.as@mail.ru',
+      lastContact: '2024-10-19',
+      nextTask: 'Согласовать условия доставки',
+      taskDate: '2024-10-22',
+      source: 'Сайт',
+      tags: ['Розница', 'Частые заказы']
+    },
+    { 
+      id: 4,
+      name: 'ООО "ГлавСтрой"', 
+      purchases: 1480000, 
+      orders: 18, 
+      growth: '+12.1%', 
+      status: 'regular', 
+      loyaltyPoints: 14800, 
+      tier: 'Золото',
+      manager: 'Иванов И.И.',
+      phone: '+7 (495) 456-78-90',
+      email: 'glavstroy@yandex.ru',
+      lastContact: '2024-10-16',
+      nextTask: 'Презентация новых материалов',
+      taskDate: '2024-10-23',
+      source: 'Холодный звонок',
+      tags: ['Опт', 'Сезонный']
+    },
+    { 
+      id: 5,
+      name: 'ООО "Базис"', 
+      purchases: 1320000, 
+      orders: 24, 
+      growth: '+19.4%', 
+      status: 'regular', 
+      loyaltyPoints: 13200, 
+      tier: 'Серебро',
+      manager: 'Петрова А.С.',
+      phone: '+7 (499) 567-89-01',
+      email: 'order@basis.com',
+      lastContact: '2024-10-15',
+      nextTask: 'Уточнить потребность на ноябрь',
+      taskDate: '2024-10-25',
+      source: 'Выставка',
+      tags: ['Опт', 'Новый']
+    },
+    { 
+      id: 6,
+      name: 'ИП Сидоров В.М.', 
+      purchases: 980000, 
+      orders: 16, 
+      growth: '+5.2%', 
+      status: 'regular', 
+      loyaltyPoints: 9800, 
+      tier: 'Серебро',
+      manager: 'Сидоров В.М.',
+      phone: '+7 (916) 678-90-12',
+      email: 'sidorov.vm@gmail.com',
+      lastContact: '2024-10-14',
+      nextTask: 'Отправить счёт',
+      taskDate: '2024-10-20',
+      source: 'Referral',
+      tags: ['Розница', 'Требует внимания']
+    },
+  ];
+
+  const managers = [
+    { 
+      id: 1, 
+      name: 'Иванов И.И.', 
+      clients: 45, 
+      revenue: 8900000, 
+      tasks: 12, 
+      completedTasks: 89,
+      conversion: 34.5,
+      avgDeal: 197800,
+      photo: '👨‍💼'
+    },
+    { 
+      id: 2, 
+      name: 'Петрова А.С.', 
+      clients: 38, 
+      revenue: 7200000, 
+      tasks: 8, 
+      completedTasks: 92,
+      conversion: 41.2,
+      avgDeal: 189500,
+      photo: '👩‍💼'
+    },
+    { 
+      id: 3, 
+      name: 'Сидоров В.М.', 
+      clients: 52, 
+      revenue: 6800000, 
+      tasks: 15, 
+      completedTasks: 85,
+      conversion: 28.7,
+      avgDeal: 130800,
+      photo: '👨‍💼'
+    }
+  ];
+
+  const tasks = [
+    { 
+      id: 1, 
+      client: 'ООО "СтройТех"', 
+      manager: 'Иванов И.И.', 
+      task: 'Отправить КП на фасадные системы', 
+      dueDate: '2024-10-21', 
+      priority: 'high', 
+      status: 'pending',
+      type: 'proposal',
+      estimatedValue: 850000
+    },
+    { 
+      id: 2, 
+      client: 'ООО "МонолитСтрой"', 
+      manager: 'Петрова А.С.', 
+      task: 'Перезвонить по новому заказу', 
+      dueDate: '2024-10-20', 
+      priority: 'high', 
+      status: 'pending',
+      type: 'call',
+      estimatedValue: 650000
+    },
+    { 
+      id: 3, 
+      client: 'ИП Петров А.С.', 
+      manager: 'Сидоров В.М.', 
+      task: 'Согласовать условия доставки', 
+      dueDate: '2024-10-22', 
+      priority: 'medium', 
+      status: 'pending',
+      type: 'meeting',
+      estimatedValue: 245000
+    },
+    { 
+      id: 4, 
+      client: 'ООО "ГлавСтрой"', 
+      manager: 'Иванов И.И.', 
+      task: 'Презентация новых материалов', 
+      dueDate: '2024-10-23', 
+      priority: 'medium', 
+      status: 'pending',
+      type: 'presentation',
+      estimatedValue: 420000
+    },
+    { 
+      id: 5, 
+      client: 'ООО "Базис"', 
+      manager: 'Петрова А.С.', 
+      task: 'Уточнить потребность на ноябрь', 
+      dueDate: '2024-10-25', 
+      priority: 'low', 
+      status: 'pending',
+      type: 'call',
+      estimatedValue: 180000
+    },
+    { 
+      id: 6, 
+      client: 'ИП Сидоров В.М.', 
+      manager: 'Сидоров В.М.', 
+      task: 'Отправить счёт', 
+      dueDate: '2024-10-20', 
+      priority: 'high', 
+      status: 'completed',
+      type: 'invoice',
+      estimatedValue: 95000
+    }
+  ];
+
+  const commercialProposals = [
+    {
+      id: 1,
+      client: 'ООО "СтройТех"',
+      date: '2024-10-15',
+      total: 850000,
+      status: 'sent',
+      validUntil: '2024-10-30',
+      items: [
+        { name: 'Фасадная система Ceresit', quantity: 120, price: 5200, discount: 5 },
+        { name: 'Утеплитель ROCKWOOL', quantity: 85, price: 2850, discount: 10 }
+      ]
+    },
+    {
+      id: 2,
+      client: 'ООО "МонолитСтрой"',
+      date: '2024-10-18',
+      total: 650000,
+      status: 'accepted',
+      validUntil: '2024-11-01',
+      items: [
+        { name: 'LOGICROOF V-RP', quantity: 95, price: 4500, discount: 0 },
+        { name: 'Гидроизоляция ТЕХНОНИКОЛЬ', quantity: 65, price: 3200, discount: 15 }
+      ]
+    }
   ];
 
   const promotions = [
@@ -2062,6 +2297,459 @@ const Index = () => {
                   <Button className="w-full bg-primary hover:bg-primary/90">
                     <Icon name="Plus" size={20} className="mr-2" />
                     Создать новую рассылку
+                  </Button>
+                </TabsContent>
+              </Tabs>
+            </div>
+          ) : activeTab === 'crm' ? (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-3xl font-bold text-primary">CRM - Управление клиентами</h2>
+                <Button className="bg-primary hover:bg-primary/90">
+                  <Icon name="Plus" size={20} className="mr-2" />
+                  Добавить клиента
+                </Button>
+              </div>
+
+              <Tabs defaultValue="clients" className="w-full">
+                <TabsList className="grid w-full grid-cols-4 mb-6">
+                  <TabsTrigger value="clients">
+                    <Icon name="Users" size={18} className="mr-2" />
+                    База клиентов
+                  </TabsTrigger>
+                  <TabsTrigger value="managers">
+                    <Icon name="UserCog" size={18} className="mr-2" />
+                    Менеджеры
+                  </TabsTrigger>
+                  <TabsTrigger value="tasks">
+                    <Icon name="CheckSquare" size={18} className="mr-2" />
+                    Задачи
+                  </TabsTrigger>
+                  <TabsTrigger value="proposals">
+                    <Icon name="FileText" size={18} className="mr-2" />
+                    Коммерческие предложения
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="clients" className="space-y-4">
+                  <div className="grid md:grid-cols-4 gap-4 mb-6">
+                    <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-blue-600 mb-1">Всего клиентов</p>
+                          <p className="text-3xl font-bold text-blue-700">{topCustomers.length}</p>
+                        </div>
+                        <Icon name="Users" size={28} className="text-blue-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-purple-600 mb-1">VIP клиенты</p>
+                          <p className="text-3xl font-bold text-purple-700">{topCustomers.filter(c => c.status === 'vip').length}</p>
+                        </div>
+                        <Icon name="Crown" size={28} className="text-purple-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-green-600 mb-1">Общая выручка</p>
+                          <p className="text-2xl font-bold text-green-700">₽{(topCustomers.reduce((sum, c) => sum + c.purchases, 0) / 1000000).toFixed(1)}М</p>
+                        </div>
+                        <Icon name="TrendingUp" size={28} className="text-green-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-orange-600 mb-1">Средний чек</p>
+                          <p className="text-2xl font-bold text-orange-700">₽{(topCustomers.reduce((sum, c) => sum + c.purchases, 0) / topCustomers.reduce((sum, c) => sum + c.orders, 0) / 1000).toFixed(0)}К</p>
+                        </div>
+                        <Icon name="ShoppingCart" size={28} className="text-orange-600" />
+                      </div>
+                    </Card>
+                  </div>
+
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="flex-1 relative">
+                      <Icon name="Search" size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <input 
+                        type="text" 
+                        placeholder="Поиск клиента по названию, телефону, email..." 
+                        className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      />
+                    </div>
+                    <Select defaultValue="all">
+                      <SelectTrigger className="w-48">
+                        <SelectValue placeholder="Менеджер" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Все менеджеры</SelectItem>
+                        <SelectItem value="ivanov">Иванов И.И.</SelectItem>
+                        <SelectItem value="petrova">Петрова А.С.</SelectItem>
+                        <SelectItem value="sidorov">Сидоров В.М.</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Select defaultValue="all">
+                      <SelectTrigger className="w-40">
+                        <SelectValue placeholder="Статус" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Все</SelectItem>
+                        <SelectItem value="vip">VIP</SelectItem>
+                        <SelectItem value="regular">Обычные</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="grid gap-4">
+                    {topCustomers.map((customer) => (
+                      <Card key={customer.id} className="p-6 hover:shadow-lg transition-shadow">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-start gap-4 flex-1">
+                            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl ${
+                              customer.status === 'vip' ? 'bg-purple-100' : 'bg-blue-100'
+                            }`}>
+                              🏢
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-2">
+                                <h3 className="text-xl font-bold text-primary">{customer.name}</h3>
+                                {customer.status === 'vip' && (
+                                  <Badge className="bg-purple-100 text-purple-700 border-purple-300">
+                                    <Icon name="Crown" size={14} className="mr-1" />
+                                    VIP
+                                  </Badge>
+                                )}
+                                <Badge className="bg-blue-100 text-blue-700 border-blue-300">
+                                  {customer.tier}
+                                </Badge>
+                              </div>
+                              <div className="grid grid-cols-3 gap-4 mb-3">
+                                <div className="flex items-center gap-2 text-sm text-gray-600">
+                                  <Icon name="Phone" size={16} />
+                                  <span>{customer.phone}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm text-gray-600">
+                                  <Icon name="Mail" size={16} />
+                                  <span>{customer.email}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm text-gray-600">
+                                  <Icon name="User" size={16} />
+                                  <span>{customer.manager}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-6 text-sm">
+                                <span className="text-gray-600">
+                                  <Icon name="ShoppingBag" size={14} className="inline mr-1" />
+                                  {customer.orders} заказов
+                                </span>
+                                <span className="text-gray-600">
+                                  <Icon name="DollarSign" size={14} className="inline mr-1" />
+                                  ₽{(customer.purchases / 1000000).toFixed(1)}М
+                                </span>
+                                <span className={customer.growth.startsWith('+') ? 'text-green-600' : 'text-red-600'}>
+                                  <Icon name="TrendingUp" size={14} className="inline mr-1" />
+                                  {customer.growth}
+                                </span>
+                                <span className="text-orange-600">
+                                  <Icon name="Coins" size={14} className="inline mr-1" />
+                                  {customer.loyaltyPoints.toLocaleString()} баллов
+                                </span>
+                              </div>
+                              <div className="flex flex-wrap gap-2 mt-3">
+                                {customer.tags.map((tag, idx) => (
+                                  <Badge key={idx} variant="outline" className="text-xs">
+                                    {tag}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="flex gap-2 mb-3">
+                              <Button variant="outline" size="sm">
+                                <Icon name="Phone" size={16} className="mr-1" />
+                                Позвонить
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Icon name="Mail" size={16} className="mr-1" />
+                                Email
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Icon name="Edit" size={16} />
+                              </Button>
+                            </div>
+                            <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
+                              <p className="text-xs text-orange-600 mb-1">Следующая задача:</p>
+                              <p className="text-sm font-semibold text-orange-700">{customer.nextTask}</p>
+                              <p className="text-xs text-orange-600 mt-1">
+                                <Icon name="Calendar" size={12} className="inline mr-1" />
+                                {customer.taskDate}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="managers" className="space-y-4">
+                  <div className="grid md:grid-cols-3 gap-6">
+                    {managers.map((manager) => (
+                      <Card key={manager.id} className="p-6 hover:shadow-lg transition-shadow">
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="text-5xl">{manager.photo}</div>
+                          <div>
+                            <h3 className="text-xl font-bold text-primary">{manager.name}</h3>
+                            <p className="text-sm text-gray-600">{manager.clients} клиентов</p>
+                          </div>
+                        </div>
+                        <Separator className="my-4" />
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <span className="text-sm text-gray-700">Выручка</span>
+                            <span className="font-bold text-green-600">₽{(manager.revenue / 1000000).toFixed(1)}М</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <span className="text-sm text-gray-700">Конверсия</span>
+                            <span className="font-bold text-blue-600">{manager.conversion}%</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                            <span className="text-sm text-gray-700">Средняя сделка</span>
+                            <span className="font-bold text-orange-600">₽{(manager.avgDeal / 1000).toFixed(0)}К</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                            <span className="text-sm text-gray-700">Активные задачи</span>
+                            <span className="font-bold text-purple-600">{manager.tasks}</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span className="text-sm text-gray-700">Выполнено задач</span>
+                            <span className="font-bold text-gray-600">{manager.completedTasks}%</span>
+                          </div>
+                        </div>
+                        <Button className="w-full mt-4 bg-primary hover:bg-primary/90">
+                          <Icon name="Eye" size={16} className="mr-2" />
+                          Посмотреть клиентов
+                        </Button>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="tasks" className="space-y-4">
+                  <div className="grid md:grid-cols-4 gap-4 mb-6">
+                    <Card className="p-4 bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-red-600 mb-1">Высокий приоритет</p>
+                          <p className="text-3xl font-bold text-red-700">{tasks.filter(t => t.priority === 'high' && t.status === 'pending').length}</p>
+                        </div>
+                        <Icon name="AlertCircle" size={28} className="text-red-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-yellow-600 mb-1">Средний приоритет</p>
+                          <p className="text-3xl font-bold text-yellow-700">{tasks.filter(t => t.priority === 'medium' && t.status === 'pending').length}</p>
+                        </div>
+                        <Icon name="Clock" size={28} className="text-yellow-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-green-600 mb-1">Выполнено</p>
+                          <p className="text-3xl font-bold text-green-700">{tasks.filter(t => t.status === 'completed').length}</p>
+                        </div>
+                        <Icon name="CheckCircle" size={28} className="text-green-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-blue-600 mb-1">Потенциал</p>
+                          <p className="text-2xl font-bold text-blue-700">₽{(tasks.filter(t => t.status === 'pending').reduce((sum, t) => sum + t.estimatedValue, 0) / 1000000).toFixed(1)}М</p>
+                        </div>
+                        <Icon name="DollarSign" size={28} className="text-blue-600" />
+                      </div>
+                    </Card>
+                  </div>
+
+                  <div className="grid gap-4">
+                    {tasks.filter(t => t.status === 'pending').map((task) => (
+                      <Card key={task.id} className={`p-6 hover:shadow-lg transition-shadow border-l-4 ${
+                        task.priority === 'high' ? 'border-red-500' :
+                        task.priority === 'medium' ? 'border-yellow-500' : 'border-blue-500'
+                      }`}>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-xl font-bold text-primary">{task.task}</h3>
+                              <Badge className={
+                                task.priority === 'high' ? 'bg-red-100 text-red-700 border-red-300' :
+                                task.priority === 'medium' ? 'bg-yellow-100 text-yellow-700 border-yellow-300' :
+                                'bg-blue-100 text-blue-700 border-blue-300'
+                              }>
+                                {task.priority === 'high' ? 'Высокий' : task.priority === 'medium' ? 'Средний' : 'Низкий'}
+                              </Badge>
+                              <Badge className="bg-gray-100 text-gray-700 border-gray-300">
+                                {task.type === 'call' ? '📞 Звонок' : 
+                                 task.type === 'meeting' ? '🤝 Встреча' :
+                                 task.type === 'proposal' ? '📄 КП' :
+                                 task.type === 'presentation' ? '📊 Презентация' : '💰 Счёт'}
+                              </Badge>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 text-sm mb-3">
+                              <div className="flex items-center gap-2 text-gray-600">
+                                <Icon name="Building2" size={16} />
+                                <span>{task.client}</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-gray-600">
+                                <Icon name="User" size={16} />
+                                <span>{task.manager}</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-gray-600">
+                                <Icon name="Calendar" size={16} />
+                                <span>Срок: {task.dueDate}</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-green-600">
+                                <Icon name="DollarSign" size={16} />
+                                <span>Потенциал: ₽{task.estimatedValue.toLocaleString()}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button className="bg-green-600 hover:bg-green-700 text-white">
+                              <Icon name="Check" size={16} className="mr-1" />
+                              Выполнено
+                            </Button>
+                            <Button variant="outline">
+                              <Icon name="Edit" size={16} />
+                            </Button>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+
+                  <Button className="w-full bg-primary hover:bg-primary/90">
+                    <Icon name="Plus" size={20} className="mr-2" />
+                    Создать задачу
+                  </Button>
+                </TabsContent>
+
+                <TabsContent value="proposals" className="space-y-4">
+                  <Card className="p-6 bg-gradient-to-br from-indigo-600 to-indigo-800 text-white mb-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-2xl font-bold mb-2">Генератор коммерческих предложений</h3>
+                        <p className="text-indigo-100">Создавайте профессиональные КП с автоматическим расчётом</p>
+                      </div>
+                      <Icon name="FileText" size={64} className="opacity-20" />
+                    </div>
+                  </Card>
+
+                  <div className="grid md:grid-cols-3 gap-4 mb-6">
+                    <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-blue-600 mb-1">Отправлено КП</p>
+                          <p className="text-3xl font-bold text-blue-700">{commercialProposals.length}</p>
+                        </div>
+                        <Icon name="Send" size={28} className="text-blue-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-green-600 mb-1">Принято</p>
+                          <p className="text-3xl font-bold text-green-700">{commercialProposals.filter(p => p.status === 'accepted').length}</p>
+                        </div>
+                        <Icon name="CheckCircle" size={28} className="text-green-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-purple-600 mb-1">Сумма КП</p>
+                          <p className="text-2xl font-bold text-purple-700">₽{(commercialProposals.reduce((sum, p) => sum + p.total, 0) / 1000000).toFixed(1)}М</p>
+                        </div>
+                        <Icon name="TrendingUp" size={28} className="text-purple-600" />
+                      </div>
+                    </Card>
+                  </div>
+
+                  <div className="grid gap-4">
+                    {commercialProposals.map((proposal) => (
+                      <Card key={proposal.id} className="p-6 hover:shadow-lg transition-shadow">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-xl font-bold text-primary">КП #{proposal.id} - {proposal.client}</h3>
+                              <Badge className={
+                                proposal.status === 'accepted' ? 'bg-green-100 text-green-700 border-green-300' :
+                                proposal.status === 'sent' ? 'bg-blue-100 text-blue-700 border-blue-300' :
+                                'bg-gray-100 text-gray-700 border-gray-300'
+                              }>
+                                {proposal.status === 'accepted' ? 'Принято' : proposal.status === 'sent' ? 'Отправлено' : 'Черновик'}
+                              </Badge>
+                            </div>
+                            <div className="flex items-center gap-6 text-sm text-gray-600 mb-4">
+                              <span>
+                                <Icon name="Calendar" size={14} className="inline mr-1" />
+                                {proposal.date}
+                              </span>
+                              <span>
+                                <Icon name="Clock" size={14} className="inline mr-1" />
+                                Действует до {proposal.validUntil}
+                              </span>
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4 mb-3">
+                              <h4 className="font-semibold text-gray-700 mb-2">Позиции:</h4>
+                              {proposal.items.map((item, idx) => (
+                                <div key={idx} className="flex items-center justify-between text-sm py-2 border-b border-gray-200 last:border-0">
+                                  <span className="flex-1">{item.name}</span>
+                                  <span className="text-gray-600 mx-4">{item.quantity} шт × ₽{item.price.toLocaleString()}</span>
+                                  {item.discount > 0 && (
+                                    <Badge variant="outline" className="text-xs bg-green-50 text-green-700 mr-2">
+                                      -{item.discount}%
+                                    </Badge>
+                                  )}
+                                  <span className="font-bold">₽{((item.quantity * item.price * (100 - item.discount) / 100)).toLocaleString()}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="text-right ml-6">
+                            <p className="text-sm text-gray-500 mb-1">Итоговая сумма</p>
+                            <p className="text-3xl font-bold text-primary mb-3">₽{proposal.total.toLocaleString()}</p>
+                            <div className="flex flex-col gap-2">
+                              <Button variant="outline" size="sm">
+                                <Icon name="Download" size={16} className="mr-1" />
+                                Скачать PDF
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Icon name="Send" size={16} className="mr-1" />
+                                Отправить
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Icon name="Edit" size={16} className="mr-1" />
+                                Редактировать
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+
+                  <Button className="w-full bg-primary hover:bg-primary/90 text-lg py-6">
+                    <Icon name="Plus" size={24} className="mr-2" />
+                    Создать коммерческое предложение
                   </Button>
                 </TabsContent>
               </Tabs>
