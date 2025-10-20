@@ -261,9 +261,65 @@ const Index = () => {
     { id: 'dashboard', label: 'Дашборд', icon: 'LayoutDashboard' },
     { id: 'catalog', label: 'Каталог', icon: 'Grid3x3' },
     { id: 'orders', label: 'Заказы', icon: 'ShoppingBag' },
-    { id: 'reports', label: 'Отчёты', icon: 'FileText' },
     { id: 'analytics', label: 'Аналитика', icon: 'TrendingUp' },
+    { id: 'finance', label: 'Финансы', icon: 'Wallet' },
+    { id: 'reports', label: 'Отчёты', icon: 'FileText' },
     { id: 'history', label: 'История', icon: 'Clock' },
+  ];
+
+  const topCustomers = [
+    { name: 'ООО "СтройТех"', purchases: 3450000, orders: 28, growth: '+15.3%', status: 'vip' },
+    { name: 'ООО "МонолитСтрой"', purchases: 2890000, orders: 22, growth: '+22.8%', status: 'vip' },
+    { name: 'ИП Петров А.С.', purchases: 1650000, orders: 35, growth: '+8.5%', status: 'regular' },
+    { name: 'ООО "ГлавСтрой"', purchases: 1480000, orders: 18, growth: '+12.1%', status: 'regular' },
+    { name: 'ООО "Базис"', purchases: 1320000, orders: 24, growth: '+19.4%', status: 'regular' },
+    { name: 'ИП Сидоров В.М.', purchases: 980000, orders: 16, growth: '+5.2%', status: 'regular' },
+  ];
+
+  const profitabilityData = [
+    { name: 'ROCKWOOL Лайт Баттс', margin: 28.5, revenue: 842000, profit: 239970, trend: 'up' },
+    { name: 'ТЕХНОНИКОЛЬ Техноэласт', margin: 32.1, revenue: 654000, profit: 209934, trend: 'up' },
+    { name: 'LOGICROOF V-RP', margin: 25.3, revenue: 728000, profit: 184184, trend: 'down' },
+    { name: 'Hauberk панели', margin: 29.8, revenue: 512000, profit: 152576, trend: 'up' },
+    { name: 'Геотекстиль Дорнит', margin: 18.2, revenue: 423000, profit: 76986, trend: 'down' },
+  ];
+
+  const invoices = [
+    { id: 'СЧ-2024-158', date: '2024-10-18', customer: 'ООО "СтройТех"', amount: 543800, status: 'paid', dueDate: '2024-10-25', paidDate: '2024-10-20' },
+    { id: 'СЧ-2024-159', date: '2024-10-19', customer: 'ООО "МонолитСтрой"', amount: 728500, status: 'pending', dueDate: '2024-10-26', paidDate: null },
+    { id: 'СЧ-2024-160', date: '2024-10-19', customer: 'ИП Петров А.С.', amount: 445600, status: 'overdue', dueDate: '2024-10-20', paidDate: null },
+    { id: 'СЧ-2024-157', date: '2024-10-17', customer: 'ООО "ГлавСтрой"', amount: 892300, status: 'paid', dueDate: '2024-10-24', paidDate: '2024-10-19' },
+    { id: 'СЧ-2024-156', date: '2024-10-16', customer: 'ООО "Базис"', amount: 320100, status: 'cancelled', dueDate: '2024-10-23', paidDate: null },
+  ];
+
+  const payments = [
+    { id: 'ПЛ-4582', date: '2024-10-20 14:32', invoice: 'СЧ-2024-158', customer: 'ООО "СтройТех"', amount: 543800, method: 'Банковский перевод', status: 'completed' },
+    { id: 'ПЛ-4581', date: '2024-10-19 11:15', invoice: 'СЧ-2024-157', customer: 'ООО "ГлавСтрой"', amount: 892300, method: 'Банковский перевод', status: 'completed' },
+    { id: 'ПЛ-4580', date: '2024-10-18 16:45', invoice: 'СЧ-2024-155', customer: 'ИП Сидоров В.М.', amount: 234500, method: 'Наличные', status: 'completed' },
+    { id: 'ПЛ-4579', date: '2024-10-17 09:22', invoice: 'СЧ-2024-154', customer: 'ООО "СтройТех"', amount: 675200, method: 'Онлайн оплата', status: 'completed' },
+    { id: 'ПЛ-4578', date: '2024-10-16 13:50', invoice: 'СЧ-2024-153', customer: 'ООО "МонолитСтрой"', amount: 456800, method: 'Банковский перевод', status: 'processing' },
+  ];
+
+  const customerAccounts = [
+    { customer: 'ООО "СтройТех"', creditLimit: 2000000, used: 728500, available: 1271500, deferralDays: 14, discount: 5 },
+    { customer: 'ООО "МонолитСтрой"', creditLimit: 1500000, used: 728500, available: 771500, deferralDays: 7, discount: 3 },
+    { customer: 'ИП Петров А.С.', creditLimit: 800000, used: 445600, available: 354400, deferralDays: 0, discount: 0 },
+    { customer: 'ООО "ГлавСтрой"', creditLimit: 1200000, used: 0, available: 1200000, deferralDays: 10, discount: 4 },
+  ];
+
+  const seasonalityData = [
+    { month: 'Янв', sales: 420000, avgYear: 450000, forecast: 440000 },
+    { month: 'Фев', sales: 380000, avgYear: 420000, forecast: 405000 },
+    { month: 'Мар', sales: 720000, avgYear: 680000, forecast: 750000 },
+    { month: 'Апр', sales: 980000, avgYear: 920000, forecast: 1020000 },
+    { month: 'Май', sales: 1250000, avgYear: 1180000, forecast: 1300000 },
+    { month: 'Июн', sales: 1450000, avgYear: 1350000, forecast: 1500000 },
+    { month: 'Июл', sales: 1620000, avgYear: 1520000, forecast: 1680000 },
+    { month: 'Авг', sales: 1580000, avgYear: 1480000, forecast: 1640000 },
+    { month: 'Сен', sales: 1320000, avgYear: 1240000, forecast: 1380000 },
+    { month: 'Окт', sales: 890000, avgYear: 820000, forecast: 920000 },
+    { month: 'Ноя', sales: 0, avgYear: 580000, forecast: 640000 },
+    { month: 'Дек', sales: 0, avgYear: 420000, forecast: 460000 },
   ];
 
   const metrics = [
@@ -562,6 +618,694 @@ const Index = () => {
                   </Button>
                 </Card>
               )}
+            </div>
+          ) : activeTab === 'analytics' ? (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Аналитика продаж</h2>
+                  <p className="text-sm text-muted-foreground mt-2">Полный анализ эффективности бизнеса BAUSTOV</p>
+                </div>
+                <div className="flex gap-2">
+                  <Select defaultValue="30d">
+                    <SelectTrigger className="w-36">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="7d">7 дней</SelectItem>
+                      <SelectItem value="30d">30 дней</SelectItem>
+                      <SelectItem value="90d">90 дней</SelectItem>
+                      <SelectItem value="year">Год</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button variant="outline" size="icon">
+                    <Icon name="Download" size={18} />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card className="p-5 bg-gradient-to-br from-blue-50 to-blue-100/50 border-blue-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center">
+                      <Icon name="TrendingUp" size={20} className="text-white" />
+                    </div>
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">+18.2%</Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-1">Общая выручка</p>
+                  <p className="text-2xl font-bold">₽{(9490000).toLocaleString()}</p>
+                </Card>
+
+                <Card className="p-5 bg-gradient-to-br from-green-50 to-green-100/50 border-green-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-green-600 flex items-center justify-center">
+                      <Icon name="Percent" size={20} className="text-white" />
+                    </div>
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">+4.1%</Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-1">Средняя маржа</p>
+                  <p className="text-2xl font-bold">26.8%</p>
+                </Card>
+
+                <Card className="p-5 bg-gradient-to-br from-purple-50 to-purple-100/50 border-purple-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-purple-600 flex items-center justify-center">
+                      <Icon name="Users" size={20} className="text-white" />
+                    </div>
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">+12.5%</Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-1">Активные клиенты</p>
+                  <p className="text-2xl font-bold">348</p>
+                </Card>
+
+                <Card className="p-5 bg-gradient-to-br from-orange-50 to-orange-100/50 border-orange-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-orange-600 flex items-center justify-center">
+                      <Icon name="Package" size={20} className="text-white" />
+                    </div>
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">+9.3%</Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-1">Средний чек</p>
+                  <p className="text-2xl font-bold">₽{(27270).toLocaleString()}</p>
+                </Card>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <Icon name="BarChart3" size={20} className="text-primary" />
+                        График продаж по категориям
+                      </h3>
+                      <p className="text-sm text-muted-foreground mt-1">Сравнение объёмов за месяц</p>
+                    </div>
+                  </div>
+                  <ResponsiveContainer width="100%" height={280}>
+                    <BarChart data={barData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                      <XAxis dataKey="name" stroke="#6b7280" fontSize={12} />
+                      <YAxis stroke="#6b7280" fontSize={12} />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: '#fff', 
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '0.75rem',
+                          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                        }}
+                      />
+                      <Bar dataKey="sales" fill="#003d7a" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </Card>
+
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <Icon name="PieChart" size={20} className="text-primary" />
+                        Сегментация клиентов
+                      </h3>
+                      <p className="text-sm text-muted-foreground mt-1">Распределение по типам</p>
+                    </div>
+                  </div>
+                  <ResponsiveContainer width="100%" height={280}>
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={(entry) => `${entry.name}: ${entry.value}%`}
+                        outerRadius={100}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </Card>
+              </div>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <Icon name="TrendingUp" size={20} className="text-primary" />
+                      Сезонность и прогноз продаж
+                    </h3>
+                    <p className="text-sm text-muted-foreground mt-1">Анализ по месяцам с прогнозированием</p>
+                  </div>
+                  <Badge variant="outline">2024 год</Badge>
+                </div>
+                <ResponsiveContainer width="100%" height={350}>
+                  <LineChart data={seasonalityData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="month" stroke="#6b7280" />
+                    <YAxis stroke="#6b7280" />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: '#fff', 
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '0.75rem',
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                      }}
+                      formatter={(value: number) => `₽${value.toLocaleString()}`}
+                    />
+                    <Legend />
+                    <Line type="monotone" dataKey="sales" stroke="#003d7a" strokeWidth={3} name="Продажи 2024" dot={{ fill: '#003d7a', r: 5 }} />
+                    <Line type="monotone" dataKey="avgYear" stroke="#94a3b8" strokeWidth={2} strokeDasharray="5 5" name="Средние за годы" />
+                    <Line type="monotone" dataKey="forecast" stroke="#ff7e1f" strokeWidth={2} strokeDasharray="3 3" name="Прогноз" />
+                  </LineChart>
+                </ResponsiveContainer>
+                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <Icon name="Lightbulb" size={20} className="text-blue-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-semibold text-sm text-blue-900">Инсайт по сезонности</p>
+                      <p className="text-sm text-blue-700 mt-1">
+                        Пик продаж стройматериалов приходится на июль-август (строительный сезон). 
+                        Рекомендуем увеличить запасы популярных позиций за 2 месяца до пика.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <Icon name="Crown" size={20} className="text-yellow-600" />
+                        Топ клиентов
+                      </h3>
+                      <p className="text-sm text-muted-foreground mt-1">По объёму закупок за месяц</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    {topCustomers.map((customer, idx) => (
+                      <div 
+                        key={idx} 
+                        className="flex items-center justify-between p-4 rounded-lg hover:bg-muted/50 transition-colors border border-border"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                            idx < 2 ? 'bg-yellow-100 text-yellow-700' : 'bg-muted text-muted-foreground'
+                          }`}>
+                            {idx + 1}
+                          </div>
+                          <div>
+                            <p className="font-semibold">{customer.name}</p>
+                            <p className="text-sm text-muted-foreground">{customer.orders} заказов</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-primary">₽{customer.purchases.toLocaleString()}</p>
+                          <p className="text-sm text-green-600 font-semibold">{customer.growth}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <Icon name="Target" size={20} className="text-primary" />
+                        Прогноз спроса на материалы
+                      </h3>
+                      <p className="text-sm text-muted-foreground mt-1">Следующий месяц</p>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    {forecastData.map((item, idx) => (
+                      <div key={idx} className="p-4 rounded-lg border border-border hover:shadow-md transition-all">
+                        <div className="flex items-start justify-between mb-2">
+                          <p className="font-semibold text-sm">{item.material}</p>
+                          <Badge 
+                            variant="outline" 
+                            className={item.status === 'up' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}
+                          >
+                            {item.trend}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Текущий: {item.current} м²</span>
+                          <span className="font-semibold text-primary">Прогноз: {item.forecast} м²</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <Icon name="DollarSign" size={20} className="text-primary" />
+                      Анализ рентабельности товаров
+                    </h3>
+                    <p className="text-sm text-muted-foreground mt-1">Маржинальность и прибыль</p>
+                  </div>
+                  <Select defaultValue="margin">
+                    <SelectTrigger className="w-40">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="margin">По марже</SelectItem>
+                      <SelectItem value="profit">По прибыли</SelectItem>
+                      <SelectItem value="revenue">По выручке</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-3">
+                  {profitabilityData.map((product, idx) => (
+                    <div key={idx} className="p-5 rounded-lg border border-border hover:shadow-md transition-all">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center font-bold text-primary">
+                            {idx + 1}
+                          </div>
+                          <div>
+                            <p className="font-semibold">{product.name}</p>
+                            <p className="text-sm text-muted-foreground">Выручка: ₽{product.revenue.toLocaleString()}</p>
+                          </div>
+                        </div>
+                        <Icon 
+                          name={product.trend === 'up' ? 'TrendingUp' : 'TrendingDown'} 
+                          size={20} 
+                          className={product.trend === 'up' ? 'text-green-600' : 'text-red-600'}
+                        />
+                      </div>
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Маржа</p>
+                          <p className="text-lg font-bold text-primary">{product.margin}%</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Прибыль</p>
+                          <p className="text-lg font-bold text-green-600">₽{product.profit.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Статус</p>
+                          <Badge className={product.trend === 'up' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}>
+                            {product.trend === 'up' ? 'Рост' : 'Падение'}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+          ) : activeTab === 'finance' ? (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Финансы</h2>
+                  <p className="text-sm text-muted-foreground mt-2">Счета, платежи, взаиморасчёты и кредитные лимиты</p>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => openModal({ type: 'create-invoice' })}>
+                    <Icon name="Plus" size={18} className="mr-2" />
+                    Новый счёт
+                  </Button>
+                  <Button onClick={() => openModal({ type: 'payment-link' })}>
+                    <Icon name="Link" size={18} className="mr-2" />
+                    Ссылка на оплату
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card className="p-5 bg-gradient-to-br from-green-50 to-green-100/50 border-green-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-green-600 flex items-center justify-center">
+                      <Icon name="DollarSign" size={20} className="text-white" />
+                    </div>
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">Оплачено</Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-1">К получению</p>
+                  <p className="text-2xl font-bold">₽{(1436100).toLocaleString()}</p>
+                </Card>
+
+                <Card className="p-5 bg-gradient-to-br from-yellow-50 to-yellow-100/50 border-yellow-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-yellow-600 flex items-center justify-center">
+                      <Icon name="Clock" size={20} className="text-white" />
+                    </div>
+                    <Badge variant="secondary" className="bg-yellow-100 text-yellow-700">Ожидание</Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-1">Не оплачено</p>
+                  <p className="text-2xl font-bold">₽{(728500).toLocaleString()}</p>
+                </Card>
+
+                <Card className="p-5 bg-gradient-to-br from-red-50 to-red-100/50 border-red-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-red-600 flex items-center justify-center">
+                      <Icon name="AlertCircle" size={20} className="text-white" />
+                    </div>
+                    <Badge variant="secondary" className="bg-red-100 text-red-700">Просрочено</Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-1">Дебиторка</p>
+                  <p className="text-2xl font-bold">₽{(445600).toLocaleString()}</p>
+                </Card>
+
+                <Card className="p-5 bg-gradient-to-br from-blue-50 to-blue-100/50 border-blue-200">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center">
+                      <Icon name="CreditCard" size={20} className="text-white" />
+                    </div>
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-700">Кредит</Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-1">Доступный лимит</p>
+                  <p className="text-2xl font-bold">₽{(3597400).toLocaleString()}</p>
+                </Card>
+              </div>
+
+              <Tabs defaultValue="invoices" className="w-full">
+                <TabsList className="grid w-full grid-cols-4">
+                  <TabsTrigger value="invoices">Счета</TabsTrigger>
+                  <TabsTrigger value="payments">Платежи</TabsTrigger>
+                  <TabsTrigger value="accounts">Взаиморасчёты</TabsTrigger>
+                  <TabsTrigger value="discounts">Скидки</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="invoices" className="space-y-4 mt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold">Счета на оплату</h3>
+                    <div className="flex gap-2">
+                      <Select defaultValue="all">
+                        <SelectTrigger className="w-36">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">Все статусы</SelectItem>
+                          <SelectItem value="paid">Оплачено</SelectItem>
+                          <SelectItem value="pending">Ожидание</SelectItem>
+                          <SelectItem value="overdue">Просрочено</SelectItem>
+                          <SelectItem value="cancelled">Отменено</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    {invoices.map((invoice) => (
+                      <Card 
+                        key={invoice.id} 
+                        className="p-5 hover:shadow-lg transition-all cursor-pointer"
+                        onClick={() => openModal({ type: 'invoice-details', invoice })}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-start gap-4 flex-1">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                              invoice.status === 'paid' ? 'bg-green-100' :
+                              invoice.status === 'overdue' ? 'bg-red-100' :
+                              invoice.status === 'cancelled' ? 'bg-gray-100' :
+                              'bg-yellow-100'
+                            }`}>
+                              <Icon 
+                                name={invoice.status === 'paid' ? 'CheckCircle' : invoice.status === 'overdue' ? 'AlertCircle' : invoice.status === 'cancelled' ? 'XCircle' : 'Clock'} 
+                                size={24} 
+                                className={
+                                  invoice.status === 'paid' ? 'text-green-600' :
+                                  invoice.status === 'overdue' ? 'text-red-600' :
+                                  invoice.status === 'cancelled' ? 'text-gray-600' :
+                                  'text-yellow-600'
+                                }
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-1">
+                                <h4 className="font-bold">Счёт #{invoice.id}</h4>
+                                <Badge className={
+                                  invoice.status === 'paid' ? 'bg-green-100 text-green-700' :
+                                  invoice.status === 'overdue' ? 'bg-red-100 text-red-700' :
+                                  invoice.status === 'cancelled' ? 'bg-gray-100 text-gray-700' :
+                                  'bg-yellow-100 text-yellow-700'
+                                }>
+                                  {invoice.status === 'paid' ? 'Оплачен' : invoice.status === 'overdue' ? 'Просрочен' : invoice.status === 'cancelled' ? 'Отменён' : 'Ожидание'}
+                                </Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground">{invoice.customer}</p>
+                              <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                                <span>Выставлен: {new Date(invoice.date).toLocaleDateString('ru-RU')}</span>
+                                <span>Срок: {new Date(invoice.dueDate).toLocaleDateString('ru-RU')}</span>
+                                {invoice.paidDate && <span className="text-green-600">Оплачен: {new Date(invoice.paidDate).toLocaleDateString('ru-RU')}</span>}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-2xl font-bold text-primary">₽{invoice.amount.toLocaleString()}</p>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="mt-2"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                alert(`Скачивание PDF: Счёт_${invoice.id}.pdf`);
+                              }}
+                            >
+                              <Icon name="Download" size={16} className="mr-1" />
+                              PDF
+                            </Button>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="payments" className="space-y-4 mt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold">История платежей</h3>
+                    <Button variant="outline" size="sm">
+                      <Icon name="Filter" size={16} className="mr-2" />
+                      Фильтры
+                    </Button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {payments.map((payment) => (
+                      <Card key={payment.id} className="p-5 hover:shadow-md transition-all">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-start gap-4 flex-1">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                              payment.status === 'completed' ? 'bg-green-100' : 'bg-yellow-100'
+                            }`}>
+                              <Icon 
+                                name={payment.method === 'Банковский перевод' ? 'Building2' : payment.method === 'Наличные' ? 'Wallet' : 'CreditCard'} 
+                                size={24} 
+                                className={payment.status === 'completed' ? 'text-green-600' : 'text-yellow-600'}
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-1">
+                                <h4 className="font-bold">{payment.id}</h4>
+                                <Badge className={payment.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}>
+                                  {payment.status === 'completed' ? 'Проведён' : 'Обработка'}
+                                </Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-1">{payment.customer}</p>
+                              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                <span>Счёт: {payment.invoice}</span>
+                                <span>{payment.method}</span>
+                                <span>{payment.date}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xl font-bold text-green-600">₽{payment.amount.toLocaleString()}</p>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="accounts" className="space-y-4 mt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold">Взаиморасчёты с клиентами</h3>
+                      <p className="text-sm text-muted-foreground mt-1">Кредитные лимиты и отсрочки платежа</p>
+                    </div>
+                    <Button variant="outline" onClick={() => openModal({ type: 'edit-credit-limit' })}>
+                      <Icon name="Settings" size={16} className="mr-2" />
+                      Настроить
+                    </Button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {customerAccounts.map((account, idx) => (
+                      <Card key={idx} className="p-6">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h4 className="font-bold text-lg">{account.customer}</h4>
+                            <div className="flex items-center gap-4 mt-2 text-sm">
+                              <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                                <Icon name="Calendar" size={14} className="mr-1" />
+                                Отсрочка: {account.deferralDays} дней
+                              </Badge>
+                              {account.discount > 0 && (
+                                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                                  <Icon name="Percent" size={14} className="mr-1" />
+                                  Скидка: {account.discount}%
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          <Button variant="ghost" size="sm">
+                            <Icon name="MoreVertical" size={18} />
+                          </Button>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-4">
+                          <div className="p-4 rounded-lg bg-muted/50">
+                            <p className="text-xs text-muted-foreground mb-1">Кредитный лимит</p>
+                            <p className="text-lg font-bold">₽{account.creditLimit.toLocaleString()}</p>
+                          </div>
+                          <div className="p-4 rounded-lg bg-red-50">
+                            <p className="text-xs text-muted-foreground mb-1">Использовано</p>
+                            <p className="text-lg font-bold text-red-600">₽{account.used.toLocaleString()}</p>
+                          </div>
+                          <div className="p-4 rounded-lg bg-green-50">
+                            <p className="text-xs text-muted-foreground mb-1">Доступно</p>
+                            <p className="text-lg font-bold text-green-600">₽{account.available.toLocaleString()}</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-4">
+                          <div className="flex items-center justify-between text-sm mb-2">
+                            <span className="text-muted-foreground">Использование лимита</span>
+                            <span className="font-semibold">{((account.used / account.creditLimit) * 100).toFixed(1)}%</span>
+                          </div>
+                          <div className="w-full bg-muted rounded-full h-2">
+                            <div 
+                              className={`h-2 rounded-full transition-all ${
+                                (account.used / account.creditLimit) > 0.8 ? 'bg-red-500' :
+                                (account.used / account.creditLimit) > 0.5 ? 'bg-yellow-500' :
+                                'bg-green-500'
+                              }`}
+                              style={{ width: `${(account.used / account.creditLimit) * 100}%` }}
+                            />
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="discounts" className="space-y-4 mt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold">Система скидок и бонусов</h3>
+                      <p className="text-sm text-muted-foreground mt-1">Настройте программы лояльности для клиентов</p>
+                    </div>
+                    <Button onClick={() => openModal({ type: 'create-discount' })}>
+                      <Icon name="Plus" size={16} className="mr-2" />
+                      Новая акция
+                    </Button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Card className="p-6 border-2 border-primary/20 bg-primary/5">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <Badge className="bg-green-100 text-green-700 mb-2">Активна</Badge>
+                          <h4 className="font-bold text-lg">Скидка за объём</h4>
+                          <p className="text-sm text-muted-foreground mt-1">От 100 м² — 3%, от 500 м² — 5%, от 1000 м² — 7%</p>
+                        </div>
+                        <Icon name="Percent" size={32} className="text-primary" />
+                      </div>
+                      <Separator className="my-4" />
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Участников:</span>
+                          <span className="font-semibold">156 клиентов</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Экономия клиентов:</span>
+                          <span className="font-semibold text-green-600">₽342,500</span>
+                        </div>
+                      </div>
+                    </Card>
+
+                    <Card className="p-6 border-2 border-orange-200 bg-orange-50/50">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <Badge className="bg-orange-100 text-orange-700 mb-2">Активна</Badge>
+                          <h4 className="font-bold text-lg">Реферальная программа</h4>
+                          <p className="text-sm text-muted-foreground mt-1">Приведи клиента — получи 2% от первого заказа</p>
+                        </div>
+                        <Icon name="Users" size={32} className="text-orange-600" />
+                      </div>
+                      <Separator className="my-4" />
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Новых клиентов:</span>
+                          <span className="font-semibold">23 человека</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Выплачено бонусов:</span>
+                          <span className="font-semibold text-orange-600">₽84,200</span>
+                        </div>
+                      </div>
+                    </Card>
+
+                    <Card className="p-6 border-2 border-blue-200 bg-blue-50/50">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <Badge className="bg-blue-100 text-blue-700 mb-2">Активна</Badge>
+                          <h4 className="font-bold text-lg">Программа лояльности</h4>
+                          <p className="text-sm text-muted-foreground mt-1">1 балл за каждые 100₽. 100 баллов = 100₽ скидки</p>
+                        </div>
+                        <Icon name="Award" size={32} className="text-blue-600" />
+                      </div>
+                      <Separator className="my-4" />
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Участников:</span>
+                          <span className="font-semibold">284 клиента</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Потрачено баллов:</span>
+                          <span className="font-semibold text-blue-600">145,800 баллов</span>
+                        </div>
+                      </div>
+                    </Card>
+
+                    <Card className="p-6 border-2 border-purple-200 bg-purple-50/50">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <Badge className="bg-purple-100 text-purple-700 mb-2">Запланирована</Badge>
+                          <h4 className="font-bold text-lg">Сезонная распродажа</h4>
+                          <p className="text-sm text-muted-foreground mt-1">Скидка 15% на утеплители с 1 по 15 ноября</p>
+                        </div>
+                        <Icon name="Calendar" size={32} className="text-purple-600" />
+                      </div>
+                      <Separator className="my-4" />
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Начало:</span>
+                          <span className="font-semibold">01.11.2024</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Прогноз продаж:</span>
+                          <span className="font-semibold text-purple-600">+₽1,200,000</span>
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
           ) : (
             <>
