@@ -51,10 +51,58 @@ const Index = () => {
   const [modalContent, setModalContent] = useState<any>(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [cart, setCart] = useState<any[]>([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [productQuantity, setProductQuantity] = useState(1);
   
   const openModal = (content: any) => {
     setModalContent(content);
     setModalOpen(true);
+    if (content.type === 'product') {
+      setProductQuantity(1);
+    }
+  };
+
+  const addToCart = (product: any, quantity: number) => {
+    const existingItem = cart.find(item => item.id === product.id);
+    if (existingItem) {
+      setCart(cart.map(item => 
+        item.id === product.id 
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      ));
+    } else {
+      setCart([...cart, { ...product, quantity }]);
+    }
+    setModalOpen(false);
+    setTimeout(() => {
+      setCartOpen(true);
+    }, 300);
+  };
+
+  const removeFromCart = (productId: number) => {
+    setCart(cart.filter(item => item.id !== productId));
+  };
+
+  const updateCartQuantity = (productId: number, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+    } else {
+      setCart(cart.map(item => 
+        item.id === productId ? { ...item, quantity } : item
+      ));
+    }
+  };
+
+  const getCartTotal = () => {
+    return cart.reduce((total, item) => {
+      const price = parseInt(item.price.replace(/[^0-9]/g, ''));
+      return total + (price * item.quantity);
+    }, 0);
+  };
+
+  const getCartItemsCount = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
   const categories = [
@@ -92,9 +140,9 @@ const Index = () => {
   const menuItems = [
     { id: 'dashboard', label: 'Дашборд', icon: 'LayoutDashboard' },
     { id: 'catalog', label: 'Каталог', icon: 'Grid3x3' },
+    { id: 'orders', label: 'Заказы', icon: 'ShoppingBag' },
     { id: 'reports', label: 'Отчёты', icon: 'FileText' },
     { id: 'analytics', label: 'Аналитика', icon: 'TrendingUp' },
-    { id: 'settings', label: 'Настройки', icon: 'Settings' },
     { id: 'history', label: 'История', icon: 'Clock' },
   ];
 
@@ -195,6 +243,20 @@ const Index = () => {
                   </span>
                 )}
               </Button>
+
+              <Button 
+                variant="outline"
+                size="icon"
+                className="relative"
+                onClick={() => setCartOpen(true)}
+              >
+                <Icon name="ShoppingCart" size={18} />
+                {getCartItemsCount() > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-xs rounded-full flex items-center justify-center font-bold">
+                    {getCartItemsCount()}
+                  </span>
+                )}
+              </Button>
               
               <Button onClick={() => openModal({ type: 'export', dateRange })}>
                 <Icon name="Download" size={18} className="mr-2" />
@@ -277,7 +339,14 @@ const Index = () => {
                             <p className="text-lg font-bold text-primary">{product.price}</p>
                             <p className="text-xs text-muted-foreground">В наличии: {product.stock.toLocaleString()} м²</p>
                           </div>
-                          <Button size="sm" className="group-hover:bg-primary group-hover:text-primary-foreground">
+                          <Button 
+                            size="sm" 
+                            className="group-hover:bg-primary group-hover:text-primary-foreground"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addToCart(product, 1);
+                            }}
+                          >
                             <Icon name="ShoppingCart" size={16} />
                           </Button>
                         </div>
@@ -893,16 +962,25 @@ const Index = () => {
                 <div className="space-y-3">
                   <h4 className="font-semibold">Количество</h4>
                   <div className="flex items-center gap-3">
-                    <Button variant="outline" size="icon">
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={() => setProductQuantity(Math.max(1, productQuantity - 1))}
+                    >
                       <Icon name="Minus" size={18} />
                     </Button>
                     <input 
                       type="number" 
-                      defaultValue="1" 
+                      value={productQuantity}
+                      onChange={(e) => setProductQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                       min="1"
                       className="w-24 text-center border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
                     />
-                    <Button variant="outline" size="icon">
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={() => setProductQuantity(productQuantity + 1)}
+                    >
                       <Icon name="Plus" size={18} />
                     </Button>
                     <span className="text-sm text-muted-foreground ml-2">м²</span>
@@ -910,7 +988,11 @@ const Index = () => {
                 </div>
 
                 <div className="flex gap-3">
-                  <Button className="flex-1" size="lg">
+                  <Button 
+                    className="flex-1" 
+                    size="lg"
+                    onClick={() => addToCart(modalContent.product, productQuantity)}
+                  >
                     <Icon name="ShoppingCart" size={20} className="mr-2" />
                     Добавить в корзину
                   </Button>
@@ -965,6 +1047,208 @@ const Index = () => {
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={cartOpen} onOpenChange={setCartOpen}>
+        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Icon name="ShoppingCart" size={24} className="text-primary" />
+              Корзина
+              {getCartItemsCount() > 0 && (
+                <Badge variant="secondary" className="ml-2">
+                  {getCartItemsCount()} товаров
+                </Badge>
+              )}
+            </DialogTitle>
+            <DialogDescription>
+              Проверьте ваш заказ и оформите покупку
+            </DialogDescription>
+          </DialogHeader>
+
+          {cart.length === 0 ? (
+            <div className="py-12 text-center">
+              <Icon name="ShoppingCart" size={64} className="mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Корзина пуста</h3>
+              <p className="text-muted-foreground mb-6">Добавьте товары из каталога</p>
+              <Button onClick={() => { setCartOpen(false); setActiveTab('catalog'); }}>
+                Перейти в каталог
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="space-y-3">
+                {cart.map((item) => (
+                  <Card key={item.id} className="p-4">
+                    <div className="flex items-start gap-4">
+                      <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center text-3xl flex-shrink-0">
+                        {item.image}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs text-primary font-semibold">{item.brand}</p>
+                        <h4 className="font-semibold text-sm mt-1">{item.name}</h4>
+                        <p className="text-xs text-muted-foreground mt-1">{item.specs}</p>
+                        <div className="flex items-center gap-3 mt-3">
+                          <Button 
+                            variant="outline" 
+                            size="icon" 
+                            className="h-8 w-8"
+                            onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
+                          >
+                            <Icon name="Minus" size={14} />
+                          </Button>
+                          <span className="text-sm font-semibold w-12 text-center">{item.quantity} м²</span>
+                          <Button 
+                            variant="outline" 
+                            size="icon" 
+                            className="h-8 w-8"
+                            onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
+                          >
+                            <Icon name="Plus" size={14} />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <p className="text-lg font-bold text-primary">
+                          ₽{(parseInt(item.price.replace(/[^0-9]/g, '')) * item.quantity).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">{item.price}</p>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="mt-2 text-destructive hover:text-destructive"
+                          onClick={() => removeFromCart(item.id)}
+                        >
+                          <Icon name="Trash2" size={16} className="mr-1" />
+                          Удалить
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              <Separator />
+
+              <Card className="p-6 bg-muted/30">
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Товары ({getCartItemsCount()} м²)</span>
+                    <span className="font-semibold">₽{getCartTotal().toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Доставка</span>
+                    <span className="font-semibold text-green-600">Бесплатно</span>
+                  </div>
+                  <Separator />
+                  <div className="flex justify-between text-lg">
+                    <span className="font-bold">Итого</span>
+                    <span className="font-bold text-primary text-2xl">₽{getCartTotal().toLocaleString()}</span>
+                  </div>
+                </div>
+              </Card>
+
+              <div className="space-y-4">
+                <h4 className="font-semibold">Контактные данные</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Имя</label>
+                    <input 
+                      type="text" 
+                      placeholder="Иван Иванов"
+                      className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Телефон</label>
+                    <input 
+                      type="tel" 
+                      placeholder="+7 (999) 123-45-67"
+                      className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="text-sm text-muted-foreground mb-1 block">Email</label>
+                    <input 
+                      type="email" 
+                      placeholder="info@example.com"
+                      className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="text-sm text-muted-foreground mb-1 block">Адрес доставки</label>
+                    <textarea 
+                      placeholder="Москва, ул. Примерная, д. 123, офис 456"
+                      rows={2}
+                      className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="text-sm text-muted-foreground mb-1 block">Комментарий к заказу (опционально)</label>
+                    <textarea 
+                      placeholder="Укажите удобное время доставки или другие пожелания"
+                      rows={2}
+                      className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setCartOpen(false)}
+                >
+                  Продолжить покупки
+                </Button>
+                <Button 
+                  className="flex-1" 
+                  size="lg"
+                  onClick={() => {
+                    setCartOpen(false);
+                    setCart([]);
+                    openModal({ type: 'order-success' });
+                  }}
+                >
+                  <Icon name="CheckCircle" size={20} className="mr-2" />
+                  Оформить заказ на ₽{getCartTotal().toLocaleString()}
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={modalOpen && modalContent?.type === 'order-success'} onOpenChange={(open) => { if (!open) setModalOpen(false); }}>
+        <DialogContent className="max-w-md">
+          <div className="text-center py-6">
+            <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+              <Icon name="CheckCircle" size={48} className="text-green-600" />
+            </div>
+            <h3 className="text-2xl font-bold mb-2">Заказ оформлен!</h3>
+            <p className="text-muted-foreground mb-6">
+              Номер заказа: #ЗК-{Math.floor(Math.random() * 10000 + 2000)}
+            </p>
+            <Card className="p-4 bg-muted/30 mb-6 text-left">
+              <p className="text-sm text-muted-foreground mb-2">Наш менеджер свяжется с вами в течение</p>
+              <p className="text-2xl font-bold text-primary">15 минут</p>
+            </Card>
+            <div className="space-y-2 mb-6">
+              <div className="flex items-center gap-2 text-sm">
+                <Icon name="Mail" size={16} className="text-muted-foreground" />
+                <span>Подтверждение отправлено на email</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <Icon name="Phone" size={16} className="text-muted-foreground" />
+                <span>Ожидайте звонок менеджера</span>
+              </div>
+            </div>
+            <Button className="w-full" onClick={() => { setModalOpen(false); setActiveTab('dashboard'); }}>
+              Вернуться на главную
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
