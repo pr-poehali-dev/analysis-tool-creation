@@ -20,11 +20,11 @@ const lineData = [
 ];
 
 const barData = [
-  { name: 'Кирпич', sales: 4200 },
-  { name: 'Цемент', sales: 3800 },
-  { name: 'Арматура', sales: 2900 },
-  { name: 'Пиломатериалы', sales: 2400 },
-  { name: 'Сухие смеси', sales: 1950 },
+  { name: 'Утеплитель', sales: 4200 },
+  { name: 'Гидроизоляция', sales: 3800 },
+  { name: 'Геосинтетика', sales: 2900 },
+  { name: 'Плоская кровля', sales: 2400 },
+  { name: 'Звукоизоляция', sales: 1950 },
 ];
 
 const pieData = [
@@ -35,11 +35,11 @@ const pieData = [
 ];
 
 const forecastData = [
-  { material: 'Кирпич М150', current: 842, forecast: 920, trend: '+9.3%', status: 'up' },
-  { material: 'Цемент ПЦ500', current: 654, forecast: 710, trend: '+8.6%', status: 'up' },
-  { material: 'Арматура 12мм', current: 423, forecast: 395, trend: '-6.6%', status: 'down' },
-  { material: 'Пиломатериалы', current: 318, forecast: 355, trend: '+11.6%', status: 'up' },
-  { material: 'Сухие смеси', current: 267, forecast: 285, trend: '+6.7%', status: 'up' },
+  { material: 'Утеплитель ROCKWOOL', current: 842, forecast: 920, trend: '+9.3%', status: 'up' },
+  { material: 'Гидроизоляция ТЕХНОНИКОЛЬ', current: 654, forecast: 710, trend: '+8.6%', status: 'up' },
+  { material: 'Геосинтетика', current: 423, forecast: 395, trend: '-6.6%', status: 'down' },
+  { material: 'Фасадные системы', current: 318, forecast: 355, trend: '+11.6%', status: 'up' },
+  { material: 'Звукоизоляция', current: 267, forecast: 285, trend: '+6.7%', status: 'up' },
 ];
 
 const Index = () => {
@@ -66,7 +66,7 @@ const Index = () => {
 
   const metrics = [
     { title: 'Выручка за месяц', value: '₽18,4 млн', change: '+15.3%', trend: 'up', icon: 'TrendingUp' },
-    { title: 'Отгружено тонн', value: '2,847', change: '+8.7%', trend: 'up', icon: 'Package' },
+    { title: 'Отгружено м²', value: '42,847', change: '+8.7%', trend: 'up', icon: 'Package' },
     { title: 'Активных заказов', value: '184', change: '+12%', trend: 'up', icon: 'ShoppingCart' },
     { title: 'Клиентов за неделю', value: '457', change: '+5.2%', trend: 'up', icon: 'Users' },
   ];
@@ -75,11 +75,13 @@ const Index = () => {
     <div className="flex min-h-screen bg-background">
       <aside className="w-64 border-r border-sidebar-border bg-sidebar">
         <div className="p-6">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
-              <Icon name="Package" size={24} className="text-white" />
-            </div>
-            <h1 className="text-xl font-bold text-sidebar-foreground">БАУСТОВ</h1>
+          <div className="mb-8">
+            <img 
+              src="https://cdn.poehali.dev/files/a3da5ee5-6618-43ea-83b8-86810035fa1a.png" 
+              alt="BAUSTOV" 
+              className="w-full"
+            />
+            <p className="text-xs text-sidebar-foreground/60 mt-2 text-center">Строительные материалы</p>
           </div>
 
           <nav className="space-y-1">
@@ -421,10 +423,10 @@ const Index = () => {
               </div>
               <div className="space-y-4">
                 {[
-                  { type: 'sale', desc: 'Заказ #ЗК-2845 - Кирпич М150', amount: '+₽142,500', time: '8 мин назад', status: 'success' },
-                  { type: 'sale', desc: 'Заказ #ЗК-2843 - Цемент ПЦ500', amount: '+₽89,300', time: '45 мин назад', status: 'success' },
-                  { type: 'refund', desc: 'Возврат #ЗК-2811', amount: '-₽23,400', time: '2 часа назад', status: 'warning' },
-                  { type: 'sale', desc: 'Заказ #ЗК-2840 - Арматура 12мм', amount: '+₽215,800', time: '3 часа назад', status: 'success' },
+                  { type: 'sale', desc: 'Заказ #ЗК-2845 - Утеплитель ROCKWOOL', amount: '+₽342,500', time: '8 мин назад', status: 'success' },
+                  { type: 'sale', desc: 'Заказ #ЗК-2843 - Гидроизоляция ТЕХНОНИКОЛЬ', amount: '+₽189,300', time: '45 мин назад', status: 'success' },
+                  { type: 'refund', desc: 'Возврат #ЗК-2811 - Геосинтетика', amount: '-₽43,400', time: '2 часа назад', status: 'warning' },
+                  { type: 'sale', desc: 'Заказ #ЗК-2840 - Плоская кровля', amount: '+₽615,800', time: '3 часа назад', status: 'success' },
                 ].map((transaction, index) => (
                   <div key={index} className="flex items-center justify-between p-4 rounded-lg hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-4">
@@ -573,8 +575,8 @@ const Index = () => {
                       <Icon name="AlertTriangle" size={20} className="text-orange-600" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-sm">Низкий запас цемента на складе №3</p>
-                      <p className="text-xs text-muted-foreground mt-1">Осталось 45 тонн. Рекомендуется пополнить запас.</p>
+                      <p className="font-semibold text-sm">Низкий запас утеплителя на складе №3</p>
+                      <p className="text-xs text-muted-foreground mt-1">Осталось 1,245 м². Рекомендуется пополнить запас ROCKWOOL.</p>
                       <p className="text-xs text-muted-foreground mt-2">15 минут назад</p>
                     </div>
                   </div>
@@ -587,7 +589,7 @@ const Index = () => {
                     </div>
                     <div className="flex-1">
                       <p className="font-semibold text-sm">Новый заказ #ЗК-2850</p>
-                      <p className="text-xs text-muted-foreground mt-1">Кирпич М150 - 280 тонн. Клиент: ООО "СтройТех"</p>
+                      <p className="text-xs text-muted-foreground mt-1">Гидроизоляция ТЕХНОНИКОЛЬ - 3,800 м². Клиент: ООО "СтройТех"</p>
                       <p className="text-xs text-muted-foreground mt-2">1 час назад</p>
                     </div>
                   </div>
@@ -600,7 +602,7 @@ const Index = () => {
                     </div>
                     <div className="flex-1">
                       <p className="font-semibold text-sm">Завершена отгрузка #ЗК-2842</p>
-                      <p className="text-xs text-muted-foreground mt-1">Арматура 12мм - 145 тонн успешно отгружена.</p>
+                      <p className="text-xs text-muted-foreground mt-1">Плоская кровля - 2,145 м² успешно отгружена.</p>
                       <p className="text-xs text-muted-foreground mt-2">3 часа назад</p>
                     </div>
                   </div>
