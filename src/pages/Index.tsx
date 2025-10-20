@@ -41,6 +41,8 @@ const forecastData = [
 const Index = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [dateRange, setDateRange] = useState('7d');
+  const [selectedRegion, setSelectedRegion] = useState('all');
+  const [notifications, setNotifications] = useState(3);
 
   const menuItems = [
     { id: 'dashboard', label: 'Дашборд', icon: 'LayoutDashboard' },
@@ -109,11 +111,51 @@ const Index = () => {
                 </SelectContent>
               </Select>
               
-              <Button variant="outline" size="icon">
+              <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+                <SelectTrigger className="w-[160px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все регионы</SelectItem>
+                  <SelectItem value="moscow">Москва</SelectItem>
+                  <SelectItem value="spb">Санкт-Петербург</SelectItem>
+                  <SelectItem value="kazan">Казань</SelectItem>
+                  <SelectItem value="ekb">Екатеринбург</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={() => {
+                  alert('Обновление данных...');
+                  setTimeout(() => alert('Данные обновлены!'), 500);
+                }}
+              >
                 <Icon name="RefreshCcw" size={18} />
               </Button>
+
+              <Button 
+                variant="outline"
+                size="icon"
+                className="relative"
+                onClick={() => {
+                  setNotifications(0);
+                  alert('Уведомления:\n• Низкий запас цемента на складе №3\n• Новый заказ #ЗК-2850\n• Завершена отгрузка #ЗК-2842');
+                }}
+              >
+                <Icon name="Bell" size={18} />
+                {notifications > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-secondary text-white text-xs rounded-full flex items-center justify-center font-bold">
+                    {notifications}
+                  </span>
+                )}
+              </Button>
               
-              <Button>
+              <Button onClick={() => {
+                alert('Экспорт данных в Excel...');
+                setTimeout(() => alert('Файл "Баустов_Отчёт_" + dateRange + ".xlsx" загружен!'), 500);
+              }}>
                 <Icon name="Download" size={18} className="mr-2" />
                 Экспорт
               </Button>
@@ -126,11 +168,12 @@ const Index = () => {
             {metrics.map((metric, index) => (
               <Card 
                 key={index} 
-                className="p-6 hover:shadow-lg transition-all duration-300 animate-fade-in border-l-4"
+                className="p-6 hover:shadow-lg transition-all duration-300 animate-fade-in border-l-4 cursor-pointer"
                 style={{ 
                   borderLeftColor: index === 0 ? '#003d7a' : index === 1 ? '#ff7e1f' : index === 2 ? '#003d7a' : '#ff7e1f',
                   animationDelay: `${index * 100}ms`
                 }}
+                onClick={() => alert(`Детальная информация:\n\n${metric.title}\nТекущее значение: ${metric.value}\nИзменение: ${metric.change}\n\nНажмите для просмотра подробной статистики`)}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
@@ -164,7 +207,11 @@ const Index = () => {
                   <h3 className="text-lg font-semibold">Динамика выручки</h3>
                   <p className="text-sm text-muted-foreground">Доходы, расходы и прибыль</p>
                 </div>
-                <Button variant="ghost" size="icon">
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => alert('Настройки графика:\n• Изменить период\n• Добавить показатель\n• Экспорт в PDF')}
+                >
                   <Icon name="MoreVertical" size={18} />
                 </Button>
               </div>
@@ -195,7 +242,11 @@ const Index = () => {
                   <h3 className="text-lg font-semibold">Продажи по категориям</h3>
                   <p className="text-sm text-muted-foreground">Топ-5 материалов</p>
                 </div>
-                <Button variant="ghost" size="icon">
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => alert('Настройки графика:\n• Изменить категории\n• Сортировка\n• Экспорт данных')}
+                >
                   <Icon name="MoreVertical" size={18} />
                 </Button>
               </div>
@@ -227,7 +278,13 @@ const Index = () => {
                 </div>
                 <p className="text-sm text-muted-foreground">На основе исторических данных и текущих трендов</p>
               </div>
-              <Button variant="outline">
+              <Button 
+                variant="outline"
+                onClick={() => {
+                  alert('Экспорт прогноза поставок...');
+                  setTimeout(() => alert('Файл "Прогноз_поставок_ноябрь_2025.pdf" сохранён!'), 500);
+                }}
+              >
                 <Icon name="FileDown" size={18} className="mr-2" />
                 Экспорт прогноза
               </Button>
@@ -294,7 +351,11 @@ const Index = () => {
                   <h3 className="text-lg font-semibold">Каналы сбыта</h3>
                   <p className="text-sm text-muted-foreground">Структура продаж</p>
                 </div>
-                <Button variant="ghost" size="icon">
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => alert('Дополнительные опции:\n• Детальная статистика\n• Сравнение с прошлым периодом\n• Экспорт данных')}
+                >
                   <Icon name="MoreVertical" size={18} />
                 </Button>
               </div>
@@ -335,7 +396,14 @@ const Index = () => {
                   <h3 className="text-lg font-semibold">Последние операции</h3>
                   <p className="text-sm text-muted-foreground">Недавняя активность</p>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => {
+                    setActiveTab('history');
+                    alert('Переход в полную историю операций...');
+                  }}
+                >
                   Смотреть всё
                 </Button>
               </div>
