@@ -30,6 +30,14 @@ const pieData = [
   { name: 'Онлайн', value: 8, color: '#ffb366' },
 ];
 
+const forecastData = [
+  { material: 'Кирпич М150', current: 842, forecast: 920, trend: '+9.3%', status: 'up' },
+  { material: 'Цемент ПЦ500', current: 654, forecast: 710, trend: '+8.6%', status: 'up' },
+  { material: 'Арматура 12мм', current: 423, forecast: 395, trend: '-6.6%', status: 'down' },
+  { material: 'Пиломатериалы', current: 318, forecast: 355, trend: '+11.6%', status: 'up' },
+  { material: 'Сухие смеси', current: 267, forecast: 285, trend: '+6.7%', status: 'up' },
+];
+
 const Index = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [dateRange, setDateRange] = useState('7d');
@@ -209,6 +217,75 @@ const Index = () => {
               </ResponsiveContainer>
             </Card>
           </div>
+
+          <Card className="p-6 mb-6 animate-fade-in bg-gradient-to-br from-primary/5 to-secondary/5 border-2 border-primary/20" style={{ animationDelay: '800ms' }}>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Icon name="TrendingUp" size={24} className="text-primary" />
+                  <h3 className="text-xl font-bold">Прогноз поставок на следующий месяц</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">На основе исторических данных и текущих трендов</p>
+              </div>
+              <Button variant="outline">
+                <Icon name="FileDown" size={18} className="mr-2" />
+                Экспорт прогноза
+              </Button>
+            </div>
+            
+            <div className="space-y-3">
+              {forecastData.map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-4 bg-card rounded-lg hover:shadow-md transition-all">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className={`w-2 h-2 rounded-full ${item.status === 'up' ? 'bg-green-500' : 'bg-orange-500'}`} />
+                      <span className="font-semibold text-base">{item.material}</span>
+                      <span className={`text-sm font-semibold flex items-center gap-1 ${
+                        item.status === 'up' ? 'text-green-600' : 'text-orange-600'
+                      }`}>
+                        {item.trend}
+                        <Icon name={item.status === 'up' ? 'ArrowUp' : 'ArrowDown'} size={14} />
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-6 ml-5">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Текущий месяц</p>
+                        <p className="text-lg font-bold text-foreground">{item.current} т</p>
+                      </div>
+                      <Icon name="ArrowRight" size={20} className="text-muted-foreground" />
+                      <div>
+                        <p className="text-xs text-muted-foreground">Прогноз</p>
+                        <p className="text-lg font-bold text-primary">{item.forecast} т</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <div className="w-24 h-2 bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full ${
+                          item.status === 'up' ? 'bg-green-500' : 'bg-orange-500'
+                        }`}
+                        style={{ width: `${Math.abs(parseFloat(item.trend))}0%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-6 p-4 bg-primary/5 rounded-lg border border-primary/20">
+              <div className="flex items-start gap-3">
+                <Icon name="Info" size={20} className="text-primary mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-foreground mb-1">Рекомендация системы</p>
+                  <p className="text-sm text-muted-foreground">
+                    Увеличить складские запасы кирпича и пиломатериалов на 15-20% для покрытия прогнозируемого спроса. 
+                    Рассмотреть снижение закупки арматуры в связи с падением спроса.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Card>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="p-6 animate-fade-in" style={{ animationDelay: '600ms' }}>
