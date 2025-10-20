@@ -54,6 +54,80 @@ const Index = () => {
   const [cart, setCart] = useState<any[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [productQuantity, setProductQuantity] = useState(1);
+  const [orders, setOrders] = useState<any[]>([
+    {
+      id: 'ЗК-2850',
+      date: '2024-10-18',
+      status: 'delivered',
+      total: 543800,
+      items: [
+        { name: 'Гидроизоляция ТЕХНОНИКОЛЬ', quantity: 38, price: 3200, image: '💧' },
+        { name: 'Утеплитель ROCKWOOL', quantity: 120, price: 2850, image: '🏗️' }
+      ],
+      customer: 'ООО "СтройТех"',
+      address: 'Москва, ул. Строителей, д. 15',
+      trackingSteps: [
+        { label: 'Заказ оформлен', date: '18.10.2024 10:15', completed: true },
+        { label: 'Подтверждён менеджером', date: '18.10.2024 10:45', completed: true },
+        { label: 'Собран на складе', date: '18.10.2024 14:20', completed: true },
+        { label: 'Отправлен в доставку', date: '19.10.2024 08:00', completed: true },
+        { label: 'Доставлен', date: '19.10.2024 15:30', completed: true }
+      ]
+    },
+    {
+      id: 'ЗК-2845',
+      date: '2024-10-17',
+      status: 'in-transit',
+      total: 728500,
+      items: [
+        { name: 'Плоская кровля LOGICROOF', quantity: 62, price: 4500, image: '🏢' },
+        { name: 'Фасадные панели Hauberk', quantity: 112, price: 2100, image: '🧱' }
+      ],
+      customer: 'ООО "МонолитСтрой"',
+      address: 'Санкт-Петербург, Невский пр., д. 88',
+      trackingSteps: [
+        { label: 'Заказ оформлен', date: '17.10.2024 09:20', completed: true },
+        { label: 'Подтверждён менеджером', date: '17.10.2024 10:00', completed: true },
+        { label: 'Собран на складе', date: '17.10.2024 16:30', completed: true },
+        { label: 'Отправлен в доставку', date: '18.10.2024 07:15', completed: true },
+        { label: 'Доставлен', date: '', completed: false, estimated: '20.10.2024' }
+      ]
+    },
+    {
+      id: 'ЗК-2843',
+      date: '2024-10-16',
+      status: 'processing',
+      total: 445600,
+      items: [
+        { name: 'Звукоизоляция ROCKWOOL', quantity: 76, price: 3400, image: '🔇' },
+        { name: 'Геотекстиль Дорнит', quantity: 2890, price: 45, image: '🗺️' }
+      ],
+      customer: 'ИП Соколов А.В.',
+      address: 'Казань, пр. Победы, д. 45',
+      trackingSteps: [
+        { label: 'Заказ оформлен', date: '16.10.2024 14:50', completed: true },
+        { label: 'Подтверждён менеджером', date: '16.10.2024 15:20', completed: true },
+        { label: 'Собран на складе', date: '', completed: false, estimated: '20.10.2024 12:00' },
+        { label: 'Отправлен в доставку', date: '', completed: false },
+        { label: 'Доставлен', date: '', completed: false }
+      ]
+    },
+    {
+      id: 'ЗК-2840',
+      date: '2024-10-15',
+      status: 'cancelled',
+      total: 156800,
+      items: [
+        { name: 'Базальтовая вата ISOVER', quantity: 143, price: 2200, image: '🏗️' }
+      ],
+      customer: 'ООО "Ремонт+"',
+      address: 'Екатеринбург, ул. Ленина, д. 23',
+      trackingSteps: [
+        { label: 'Заказ оформлен', date: '15.10.2024 11:10', completed: true },
+        { label: 'Отменён клиентом', date: '15.10.2024 12:40', completed: true }
+      ]
+    }
+  ]);
   
   const openModal = (content: any) => {
     setModalContent(content);
@@ -78,6 +152,52 @@ const Index = () => {
     setTimeout(() => {
       setCartOpen(true);
     }, 300);
+  };
+
+  const createOrder = (customerData: any) => {
+    const newOrder = {
+      id: `ЗК-${Math.floor(Math.random() * 10000 + 2000)}`,
+      date: new Date().toISOString().split('T')[0],
+      status: 'processing',
+      total: getCartTotal(),
+      items: cart.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: parseInt(item.price.replace(/[^0-9]/g, '')),
+        image: item.image
+      })),
+      customer: customerData.name || 'Не указано',
+      address: customerData.address || 'Не указано',
+      trackingSteps: [
+        { label: 'Заказ оформлен', date: new Date().toLocaleString('ru-RU'), completed: true },
+        { label: 'Подтверждён менеджером', date: '', completed: false },
+        { label: 'Собран на складе', date: '', completed: false },
+        { label: 'Отправлен в доставку', date: '', completed: false },
+        { label: 'Доставлен', date: '', completed: false }
+      ]
+    };
+    setOrders([newOrder, ...orders]);
+    return newOrder.id;
+  };
+
+  const getStatusLabel = (status: string) => {
+    const labels: any = {
+      'processing': 'В обработке',
+      'in-transit': 'В пути',
+      'delivered': 'Доставлен',
+      'cancelled': 'Отменён'
+    };
+    return labels[status] || status;
+  };
+
+  const getStatusColor = (status: string) => {
+    const colors: any = {
+      'processing': 'bg-blue-100 text-blue-700',
+      'in-transit': 'bg-orange-100 text-orange-700',
+      'delivered': 'bg-green-100 text-green-700',
+      'cancelled': 'bg-red-100 text-red-700'
+    };
+    return colors[status] || 'bg-gray-100 text-gray-700';
   };
 
   const removeFromCart = (productId: number) => {
@@ -361,6 +481,85 @@ const Index = () => {
                   <Icon name="PackageX" size={64} className="mx-auto text-muted-foreground mb-4" />
                   <h3 className="text-xl font-semibold mb-2">Товары не найдены</h3>
                   <p className="text-muted-foreground">Попробуйте изменить фильтры или поисковый запрос</p>
+                </Card>
+              )}
+            </div>
+          ) : activeTab === 'orders' ? (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold">История заказов</h2>
+                  <p className="text-sm text-muted-foreground mt-1">Отслеживайте статус ваших заказов</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">{orders.length} заказов</Badge>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                {orders.map((order) => (
+                  <Card 
+                    key={order.id} 
+                    className="p-6 hover:shadow-lg transition-all cursor-pointer"
+                    onClick={() => openModal({ type: 'order-details', order })}
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Icon name="Package" size={24} className="text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-lg">Заказ #{order.id}</h3>
+                          <p className="text-sm text-muted-foreground">{new Date(order.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                          <p className="text-sm text-muted-foreground mt-1">{order.customer}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <Badge className={getStatusColor(order.status)}>
+                          {getStatusLabel(order.status)}
+                        </Badge>
+                        <p className="text-xl font-bold text-primary mt-2">₽{order.total.toLocaleString()}</p>
+                      </div>
+                    </div>
+
+                    <Separator className="mb-4" />
+
+                    <div className="space-y-2">
+                      {order.items.map((item: any, idx: number) => (
+                        <div key={idx} className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl">{item.image}</span>
+                            <span>{item.name}</span>
+                          </div>
+                          <span className="text-muted-foreground">{item.quantity} м² × ₽{item.price.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <Separator className="my-4" />
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Icon name="MapPin" size={16} />
+                        <span className="line-clamp-1">{order.address}</span>
+                      </div>
+                      <Button variant="ghost" size="sm">
+                        Подробнее
+                        <Icon name="ChevronRight" size={16} className="ml-1" />
+                      </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              {orders.length === 0 && (
+                <Card className="p-12 text-center">
+                  <Icon name="ShoppingBag" size={64} className="mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">Заказов пока нет</h3>
+                  <p className="text-muted-foreground mb-6">Оформите первый заказ из каталога</p>
+                  <Button onClick={() => setActiveTab('catalog')}>
+                    Перейти в каталог
+                  </Button>
                 </Card>
               )}
             </div>
@@ -1149,73 +1348,95 @@ const Index = () => {
                 </div>
               </Card>
 
-              <div className="space-y-4">
-                <h4 className="font-semibold">Контактные данные</h4>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-sm text-muted-foreground mb-1 block">Имя</label>
-                    <input 
-                      type="text" 
-                      placeholder="Иван Иванов"
-                      className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm text-muted-foreground mb-1 block">Телефон</label>
-                    <input 
-                      type="tel" 
-                      placeholder="+7 (999) 123-45-67"
-                      className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <label className="text-sm text-muted-foreground mb-1 block">Email</label>
-                    <input 
-                      type="email" 
-                      placeholder="info@example.com"
-                      className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <label className="text-sm text-muted-foreground mb-1 block">Адрес доставки</label>
-                    <textarea 
-                      placeholder="Москва, ул. Примерная, д. 123, офис 456"
-                      rows={2}
-                      className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <label className="text-sm text-muted-foreground mb-1 block">Комментарий к заказу (опционально)</label>
-                    <textarea 
-                      placeholder="Укажите удобное время доставки или другие пожелания"
-                      rows={2}
-                      className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
-                    />
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const customerData = {
+                  name: formData.get('name'),
+                  phone: formData.get('phone'),
+                  email: formData.get('email'),
+                  address: formData.get('address'),
+                  comment: formData.get('comment')
+                };
+                const orderId = createOrder(customerData);
+                setCartOpen(false);
+                setCart([]);
+                openModal({ type: 'order-success', orderId });
+              }}>
+                <div className="space-y-4">
+                  <h4 className="font-semibold">Контактные данные</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-sm text-muted-foreground mb-1 block">Имя</label>
+                      <input 
+                        type="text" 
+                        name="name"
+                        placeholder="Иван Иванов"
+                        required
+                        className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm text-muted-foreground mb-1 block">Телефон</label>
+                      <input 
+                        type="tel" 
+                        name="phone"
+                        placeholder="+7 (999) 123-45-67"
+                        required
+                        className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="text-sm text-muted-foreground mb-1 block">Email</label>
+                      <input 
+                        type="email" 
+                        name="email"
+                        placeholder="info@example.com"
+                        required
+                        className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="text-sm text-muted-foreground mb-1 block">Адрес доставки</label>
+                      <textarea 
+                        name="address"
+                        placeholder="Москва, ул. Примерная, д. 123, офис 456"
+                        rows={2}
+                        required
+                        className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="text-sm text-muted-foreground mb-1 block">Комментарий к заказу (опционально)</label>
+                      <textarea 
+                        name="comment"
+                        placeholder="Укажите удобное время доставки или другие пожелания"
+                        rows={2}
+                        className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
-                  onClick={() => setCartOpen(false)}
-                >
-                  Продолжить покупки
-                </Button>
-                <Button 
-                  className="flex-1" 
-                  size="lg"
-                  onClick={() => {
-                    setCartOpen(false);
-                    setCart([]);
-                    openModal({ type: 'order-success' });
-                  }}
-                >
-                  <Icon name="CheckCircle" size={20} className="mr-2" />
-                  Оформить заказ на ₽{getCartTotal().toLocaleString()}
-                </Button>
-              </div>
+                <div className="flex gap-3 mt-6">
+                  <Button 
+                    type="button"
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={() => setCartOpen(false)}
+                  >
+                    Продолжить покупки
+                  </Button>
+                  <Button 
+                    type="submit"
+                    className="flex-1" 
+                    size="lg"
+                  >
+                    <Icon name="CheckCircle" size={20} className="mr-2" />
+                    Оформить заказ на ₽{getCartTotal().toLocaleString()}
+                  </Button>
+                </div>
+              </form>
             </div>
           )}
         </DialogContent>
@@ -1229,7 +1450,7 @@ const Index = () => {
             </div>
             <h3 className="text-2xl font-bold mb-2">Заказ оформлен!</h3>
             <p className="text-muted-foreground mb-6">
-              Номер заказа: #ЗК-{Math.floor(Math.random() * 10000 + 2000)}
+              Номер заказа: #{modalContent?.orderId || 'ЗК-' + Math.floor(Math.random() * 10000 + 2000)}
             </p>
             <Card className="p-4 bg-muted/30 mb-6 text-left">
               <p className="text-sm text-muted-foreground mb-2">Наш менеджер свяжется с вами в течение</p>
@@ -1249,6 +1470,148 @@ const Index = () => {
               Вернуться на главную
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={modalOpen && modalContent?.type === 'order-details'} onOpenChange={(open) => { if (!open) setModalOpen(false); }}>
+        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
+          {modalContent?.order && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <Icon name="Package" size={24} className="text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold">Заказ #{modalContent.order.id}</h3>
+                    <p className="text-sm text-muted-foreground font-normal">
+                      {new Date(modalContent.order.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </p>
+                  </div>
+                </DialogTitle>
+                <DialogDescription>
+                  Детальная информация о заказе и отслеживание доставки
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-6 mt-4">
+                <Card className="p-6 bg-muted/30">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Клиент</p>
+                      <p className="font-semibold">{modalContent.order.customer}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Статус</p>
+                      <Badge className={getStatusColor(modalContent.order.status)}>
+                        {getStatusLabel(modalContent.order.status)}
+                      </Badge>
+                    </div>
+                    <div className="col-span-2">
+                      <p className="text-sm text-muted-foreground mb-1">Адрес доставки</p>
+                      <div className="flex items-start gap-2">
+                        <Icon name="MapPin" size={16} className="text-primary mt-1 flex-shrink-0" />
+                        <p className="font-semibold">{modalContent.order.address}</p>
+                      </div>
+                    </div>
+                    <div className="col-span-2">
+                      <p className="text-sm text-muted-foreground mb-1">Сумма заказа</p>
+                      <p className="text-3xl font-bold text-primary">₽{modalContent.order.total.toLocaleString()}</p>
+                    </div>
+                  </div>
+                </Card>
+
+                <div>
+                  <h4 className="font-semibold mb-3">Состав заказа</h4>
+                  <div className="space-y-2">
+                    {modalContent.order.items.map((item: any, idx: number) => (
+                      <Card key={idx} className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center text-2xl">
+                              {item.image}
+                            </div>
+                            <div>
+                              <p className="font-semibold">{item.name}</p>
+                              <p className="text-sm text-muted-foreground">{item.quantity} м² × ₽{item.price.toLocaleString()}</p>
+                            </div>
+                          </div>
+                          <p className="text-lg font-bold text-primary">₽{(item.quantity * item.price).toLocaleString()}</p>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h4 className="font-semibold mb-4">Отслеживание доставки</h4>
+                  <div className="relative">
+                    <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-border" />
+                    <div className="space-y-6">
+                      {modalContent.order.trackingSteps.map((step: any, idx: number) => (
+                        <div key={idx} className="relative flex items-start gap-4">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center z-10 flex-shrink-0 ${
+                            step.completed ? 'bg-green-100' : 'bg-muted'
+                          }`}>
+                            {step.completed ? (
+                              <Icon name="Check" size={20} className="text-green-600" />
+                            ) : (
+                              <Icon name="Clock" size={20} className="text-muted-foreground" />
+                            )}
+                          </div>
+                          <div className="flex-1 pt-2">
+                            <p className={`font-semibold ${step.completed ? 'text-foreground' : 'text-muted-foreground'}`}>
+                              {step.label}
+                            </p>
+                            {step.date && (
+                              <p className="text-sm text-muted-foreground mt-1">{step.date}</p>
+                            )}
+                            {!step.completed && step.estimated && (
+                              <p className="text-sm text-muted-foreground mt-1">Ожидается: {step.estimated}</p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {modalContent.order.status !== 'cancelled' && modalContent.order.status !== 'delivered' && (
+                  <Card className="p-4 bg-blue-50 border-blue-200">
+                    <div className="flex items-start gap-3">
+                      <Icon name="Info" size={20} className="text-blue-600 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="font-semibold text-sm text-blue-900">Уведомления о доставке</p>
+                        <p className="text-sm text-blue-700 mt-1">
+                          Мы отправим SMS-уведомление за час до доставки
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                )}
+
+                <div className="flex gap-3">
+                  <Button variant="outline" className="flex-1" onClick={() => setModalOpen(false)}>
+                    Закрыть
+                  </Button>
+                  {modalContent.order.status === 'processing' && (
+                    <Button variant="destructive" className="flex-1">
+                      <Icon name="X" size={18} className="mr-2" />
+                      Отменить заказ
+                    </Button>
+                  )}
+                  {modalContent.order.status === 'delivered' && (
+                    <Button className="flex-1">
+                      <Icon name="RefreshCcw" size={18} className="mr-2" />
+                      Повторить заказ
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </div>
