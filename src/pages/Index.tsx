@@ -11,6 +11,7 @@ import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Cart
 import QRScanner from '@/components/QRScanner';
 import SignaturePad from '@/components/SignaturePad';
 import DocumentCamera from '@/components/DocumentCamera';
+import { generateInvoicePDF, generatePaymentReceiptPDF } from '@/utils/pdfGenerator';
 
 const lineData = [
   { name: 'Янв', revenue: 4000, expenses: 2400, profit: 1600 },
@@ -289,11 +290,70 @@ const Index = () => {
   ];
 
   const invoices = [
-    { id: 'СЧ-2024-158', date: '2024-10-18', customer: 'ООО "СтройТех"', amount: 543800, status: 'paid', dueDate: '2024-10-25', paidDate: '2024-10-20' },
-    { id: 'СЧ-2024-159', date: '2024-10-19', customer: 'ООО "МонолитСтрой"', amount: 728500, status: 'pending', dueDate: '2024-10-26', paidDate: null },
-    { id: 'СЧ-2024-160', date: '2024-10-19', customer: 'ИП Петров А.С.', amount: 445600, status: 'overdue', dueDate: '2024-10-20', paidDate: null },
-    { id: 'СЧ-2024-157', date: '2024-10-17', customer: 'ООО "ГлавСтрой"', amount: 892300, status: 'paid', dueDate: '2024-10-24', paidDate: '2024-10-19' },
-    { id: 'СЧ-2024-156', date: '2024-10-16', customer: 'ООО "Базис"', amount: 320100, status: 'cancelled', dueDate: '2024-10-23', paidDate: null },
+    { 
+      id: 'СЧ-2024-158', 
+      date: '2024-10-18', 
+      customer: 'ООО "СтройТех"', 
+      amount: 543800, 
+      status: 'paid', 
+      dueDate: '2024-10-25', 
+      paidDate: '2024-10-20',
+      items: [
+        { name: 'Гидроизоляция ТЕХНОНИКОЛЬ Техноэласт', quantity: 38, price: 3200, image: '💧' },
+        { name: 'Утеплитель ROCKWOOL Лайт Баттс', quantity: 120, price: 2850, image: '🏗️' }
+      ]
+    },
+    { 
+      id: 'СЧ-2024-159', 
+      date: '2024-10-19', 
+      customer: 'ООО "МонолитСтрой"', 
+      amount: 728500, 
+      status: 'pending', 
+      dueDate: '2024-10-26', 
+      paidDate: null,
+      items: [
+        { name: 'Плоская кровля LOGICROOF V-RP', quantity: 62, price: 4500, image: '🏢' },
+        { name: 'Фасадные панели Hauberk', quantity: 112, price: 2100, image: '🧱' }
+      ]
+    },
+    { 
+      id: 'СЧ-2024-160', 
+      date: '2024-10-19', 
+      customer: 'ИП Петров А.С.', 
+      amount: 445600, 
+      status: 'overdue', 
+      dueDate: '2024-10-20', 
+      paidDate: null,
+      items: [
+        { name: 'Звукоизоляция ROCKWOOL Акустик Баттс', quantity: 85, price: 3400, image: '🔇' },
+        { name: 'Геотекстиль Дорнит 200', quantity: 2800, price: 45, image: '🗺️' }
+      ]
+    },
+    { 
+      id: 'СЧ-2024-157', 
+      date: '2024-10-17', 
+      customer: 'ООО "ГлавСтрой"', 
+      amount: 892300, 
+      status: 'paid', 
+      dueDate: '2024-10-24', 
+      paidDate: '2024-10-19',
+      items: [
+        { name: 'Фасадная система Ceresit', quantity: 95, price: 5200, image: '🧱' },
+        { name: 'Утеплитель LOGICPIR Балкон', quantity: 158, price: 1950, image: '🏗️' }
+      ]
+    },
+    { 
+      id: 'СЧ-2024-156', 
+      date: '2024-10-16', 
+      customer: 'ООО "Базис"', 
+      amount: 320100, 
+      status: 'cancelled', 
+      dueDate: '2024-10-23', 
+      paidDate: null,
+      items: [
+        { name: 'Базальтовая вата ISOVER', quantity: 145, price: 2200, image: '🏗️' }
+      ]
+    },
   ];
 
   const payments = [
@@ -1075,7 +1135,7 @@ const Index = () => {
                               className="mt-2"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                alert(`Скачивание PDF: Счёт_${invoice.id}.pdf`);
+                                generateInvoicePDF(invoice);
                               }}
                             >
                               <Icon name="Download" size={16} className="mr-1" />
@@ -1128,6 +1188,18 @@ const Index = () => {
                           </div>
                           <div className="text-right">
                             <p className="text-xl font-bold text-green-600">₽{payment.amount.toLocaleString()}</p>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="mt-2"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                generatePaymentReceiptPDF(payment);
+                              }}
+                            >
+                              <Icon name="Download" size={16} className="mr-1" />
+                              Квитанция
+                            </Button>
                           </div>
                         </div>
                       </Card>
