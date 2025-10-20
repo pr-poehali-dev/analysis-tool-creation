@@ -8,6 +8,9 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import QRScanner from '@/components/QRScanner';
+import SignaturePad from '@/components/SignaturePad';
+import DocumentCamera from '@/components/DocumentCamera';
 
 const lineData = [
   { name: 'Янв', revenue: 4000, expenses: 2400, profit: 1600 },
@@ -263,6 +266,7 @@ const Index = () => {
     { id: 'orders', label: 'Заказы', icon: 'ShoppingBag' },
     { id: 'analytics', label: 'Аналитика', icon: 'TrendingUp' },
     { id: 'finance', label: 'Финансы', icon: 'Wallet' },
+    { id: 'mobile', label: 'Мобильные', icon: 'Smartphone' },
     { id: 'reports', label: 'Отчёты', icon: 'FileText' },
     { id: 'history', label: 'История', icon: 'Clock' },
   ];
@@ -1307,6 +1311,221 @@ const Index = () => {
                 </TabsContent>
               </Tabs>
             </div>
+          ) : activeTab === 'mobile' ? (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Мобильные инструменты</h2>
+                  <p className="text-sm text-muted-foreground mt-2">Работа менеджеров на выезде: сканер, подписи, документы</p>
+                </div>
+                <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+                  <Icon name="Smartphone" size={16} className="mr-1" />
+                  PWA Ready
+                </Badge>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <Card className="p-5 bg-gradient-to-br from-blue-50 to-blue-100/50 border-blue-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center">
+                      <Icon name="QrCode" size={24} className="text-white" />
+                    </div>
+                    <div>
+                      <p className="font-bold">QR-сканер</p>
+                      <p className="text-xs text-muted-foreground">Товары</p>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    onClick={() => openModal({ type: 'qr-scanner' })}
+                  >
+                    <Icon name="Camera" size={18} className="mr-2" />
+                    Сканировать
+                  </Button>
+                </Card>
+
+                <Card className="p-5 bg-gradient-to-br from-purple-50 to-purple-100/50 border-purple-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 rounded-xl bg-purple-600 flex items-center justify-center">
+                      <Icon name="Pen" size={24} className="text-white" />
+                    </div>
+                    <div>
+                      <p className="font-bold">Подпись</p>
+                      <p className="text-xs text-muted-foreground">Доставка</p>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full bg-purple-600 hover:bg-purple-700"
+                    onClick={() => openModal({ type: 'signature-pad', customerName: 'ООО "СтройТех"' })}
+                  >
+                    <Icon name="Edit" size={18} className="mr-2" />
+                    Получить
+                  </Button>
+                </Card>
+
+                <Card className="p-5 bg-gradient-to-br from-pink-50 to-pink-100/50 border-pink-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 rounded-xl bg-pink-600 flex items-center justify-center">
+                      <Icon name="Camera" size={24} className="text-white" />
+                    </div>
+                    <div>
+                      <p className="font-bold">Документы</p>
+                      <p className="text-xs text-muted-foreground">Паспорт</p>
+                    </div>
+                  </div>
+                  <Button 
+                    className="w-full bg-pink-600 hover:bg-pink-700"
+                    onClick={() => openModal({ type: 'document-camera', documentType: 'passport' })}
+                  >
+                    <Icon name="Image" size={18} className="mr-2" />
+                    Сфотографировать
+                  </Button>
+                </Card>
+              </div>
+
+              <Card className="p-6 border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5">
+                <div className="flex items-start gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center flex-shrink-0">
+                    <Icon name="Smartphone" size={32} className="text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-2">PWA приложение BAUSTOV</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Установите приложение на главный экран для быстрого доступа ко всем функциям. 
+                      Работает офлайн и отправляет push-уведомления о новых заказах.
+                    </p>
+                    <div className="flex gap-3">
+                      <Button size="lg" onClick={() => {
+                        if ('serviceWorker' in navigator) {
+                          navigator.serviceWorker.register('/sw.js');
+                          alert('PWA активировано! Теперь можно установить приложение через меню браузера.');
+                        }
+                      }}>
+                        <Icon name="Download" size={20} className="mr-2" />
+                        Установить приложение
+                      </Button>
+                      <Button variant="outline" size="lg">
+                        <Icon name="Info" size={20} className="mr-2" />
+                        Инструкция
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card className="p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Icon name="History" size={20} className="text-primary" />
+                    Недавние сканирования
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { code: 'QR-ROCK-8423', product: 'ROCKWOOL Лайт Баттс', time: '5 мин назад', status: 'success' },
+                      { code: 'QR-TECH-5621', product: 'ТЕХНОНИКОЛЬ Техноэласт', time: '12 мин назад', status: 'success' },
+                      { code: 'QR-LOG-3347', product: 'LOGICROOF V-RP', time: '1 час назад', status: 'success' },
+                    ].map((scan, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                            <Icon name="CheckCircle" size={20} className="text-green-600" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm">{scan.product}</p>
+                            <p className="text-xs text-muted-foreground">{scan.code}</p>
+                          </div>
+                        </div>
+                        <span className="text-xs text-muted-foreground">{scan.time}</span>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+
+                <Card className="p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Icon name="FileCheck" size={20} className="text-primary" />
+                    Собранные подписи
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { order: 'ЗК-2850', customer: 'ООО "СтройТех"', time: 'Сегодня 14:32', driver: 'Иванов С.А.' },
+                      { order: 'ЗК-2845', customer: 'ООО "МонолитСтрой"', time: 'Сегодня 11:15', driver: 'Петров В.М.' },
+                      { order: 'ЗК-2843', customer: 'ИП Сидоров', time: 'Вчера 16:48', driver: 'Иванов С.А.' },
+                    ].map((sig, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                            <Icon name="Pen" size={20} className="text-purple-600" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm">{sig.customer}</p>
+                            <p className="text-xs text-muted-foreground">Заказ #{sig.order} • {sig.driver}</p>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="sm">
+                          <Icon name="Eye" size={16} />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+
+              <Card className="p-6">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <Icon name="Image" size={20} className="text-primary" />
+                  Фото документов клиентов
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { type: 'Паспорт', customer: 'ООО "СтройТех"', date: '18.10.2024', icon: 'IdCard' },
+                    { type: 'Доверенность', customer: 'ООО "МонолитСтрой"', date: '17.10.2024', icon: 'FileText' },
+                    { type: 'Паспорт', customer: 'ИП Петров А.С.', date: '16.10.2024', icon: 'IdCard' },
+                    { type: 'Договор', customer: 'ООО "ГлавСтрой"', date: '15.10.2024', icon: 'File' },
+                  ].map((doc, idx) => (
+                    <Card 
+                      key={idx} 
+                      className="p-4 hover:shadow-lg transition-all cursor-pointer border-2 border-dashed"
+                      onClick={() => alert(`Просмотр документа: ${doc.type} - ${doc.customer}`)}
+                    >
+                      <div className="aspect-[3/4] bg-gradient-to-br from-muted/50 to-muted rounded-lg flex items-center justify-center mb-3">
+                        <Icon name={doc.icon as any} size={48} className="text-muted-foreground" />
+                      </div>
+                      <p className="font-semibold text-sm mb-1">{doc.type}</p>
+                      <p className="text-xs text-muted-foreground mb-1">{doc.customer}</p>
+                      <p className="text-xs text-muted-foreground">{doc.date}</p>
+                    </Card>
+                  ))}
+                </div>
+              </Card>
+
+              <Card className="p-6 bg-gradient-to-r from-orange-50 to-red-50 border-orange-200">
+                <div className="flex items-start gap-4">
+                  <Icon name="Lightbulb" size={32} className="text-orange-600 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-lg mb-2">Возможности мобильного режима</h4>
+                    <div className="grid md:grid-cols-2 gap-3 text-sm">
+                      <div className="flex items-start gap-2">
+                        <Icon name="Check" size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
+                        <span>Работа без интернета (офлайн-режим)</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <Icon name="Check" size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
+                        <span>Push-уведомления о новых заказах</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <Icon name="Check" size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
+                        <span>GPS-геолокация для маршрутов</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <Icon name="Check" size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
+                        <span>Синхронизация данных в фоне</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
           ) : (
             <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -1989,6 +2208,38 @@ const Index = () => {
                 </Button>
               </div>
             </>
+          )}
+
+          {modalContent?.type === 'qr-scanner' && (
+            <QRScanner
+              onScan={(result) => {
+                setModalOpen(false);
+                alert(`QR-код отсканирован:\n${result}\n\nТовар найден в системе!`);
+              }}
+              onClose={() => setModalOpen(false)}
+            />
+          )}
+
+          {modalContent?.type === 'signature-pad' && (
+            <SignaturePad
+              customerName={modalContent.customerName}
+              onSave={(signature) => {
+                setModalOpen(false);
+                alert('Подпись клиента успешно сохранена!\n\nДокумент отправлен на email клиента.');
+              }}
+              onClose={() => setModalOpen(false)}
+            />
+          )}
+
+          {modalContent?.type === 'document-camera' && (
+            <DocumentCamera
+              documentType={modalContent.documentType || 'passport'}
+              onCapture={(photo, type) => {
+                setModalOpen(false);
+                alert(`Фото документа сохранено!\nТип: ${type}\n\nДобавлено в заказ клиента.`);
+              }}
+              onClose={() => setModalOpen(false)}
+            />
           )}
         </DialogContent>
       </Dialog>
