@@ -58,6 +58,10 @@ const Index = () => {
   const [cart, setCart] = useState<any[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [productQuantity, setProductQuantity] = useState(1);
+  const [customerLoyaltyPoints, setCustomerLoyaltyPoints] = useState<any>({});
+  const [activePromotions, setActivePromotions] = useState<any[]>([]);
+  const [referralCode, setReferralCode] = useState('');
+  const [emailCampaigns, setEmailCampaigns] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([
     {
       id: 'ЗК-2850',
@@ -265,6 +269,7 @@ const Index = () => {
     { id: 'dashboard', label: 'Дашборд', icon: 'LayoutDashboard' },
     { id: 'catalog', label: 'Каталог', icon: 'Grid3x3' },
     { id: 'orders', label: 'Заказы', icon: 'ShoppingBag' },
+    { id: 'marketing', label: 'Маркетинг', icon: 'Megaphone' },
     { id: 'analytics', label: 'Аналитика', icon: 'TrendingUp' },
     { id: 'finance', label: 'Финансы', icon: 'Wallet' },
     { id: 'mobile', label: 'Мобильные', icon: 'Smartphone' },
@@ -273,12 +278,98 @@ const Index = () => {
   ];
 
   const topCustomers = [
-    { name: 'ООО "СтройТех"', purchases: 3450000, orders: 28, growth: '+15.3%', status: 'vip' },
-    { name: 'ООО "МонолитСтрой"', purchases: 2890000, orders: 22, growth: '+22.8%', status: 'vip' },
-    { name: 'ИП Петров А.С.', purchases: 1650000, orders: 35, growth: '+8.5%', status: 'regular' },
-    { name: 'ООО "ГлавСтрой"', purchases: 1480000, orders: 18, growth: '+12.1%', status: 'regular' },
-    { name: 'ООО "Базис"', purchases: 1320000, orders: 24, growth: '+19.4%', status: 'regular' },
-    { name: 'ИП Сидоров В.М.', purchases: 980000, orders: 16, growth: '+5.2%', status: 'regular' },
+    { name: 'ООО "СтройТех"', purchases: 3450000, orders: 28, growth: '+15.3%', status: 'vip', loyaltyPoints: 34500, tier: 'Платина' },
+    { name: 'ООО "МонолитСтрой"', purchases: 2890000, orders: 22, growth: '+22.8%', status: 'vip', loyaltyPoints: 28900, tier: 'Платина' },
+    { name: 'ИП Петров А.С.', purchases: 1650000, orders: 35, growth: '+8.5%', status: 'regular', loyaltyPoints: 16500, tier: 'Золото' },
+    { name: 'ООО "ГлавСтрой"', purchases: 1480000, orders: 18, growth: '+12.1%', status: 'regular', loyaltyPoints: 14800, tier: 'Золото' },
+    { name: 'ООО "Базис"', purchases: 1320000, orders: 24, growth: '+19.4%', status: 'regular', loyaltyPoints: 13200, tier: 'Серебро' },
+    { name: 'ИП Сидоров В.М.', purchases: 980000, orders: 16, growth: '+5.2%', status: 'regular', loyaltyPoints: 9800, tier: 'Серебро' },
+  ];
+
+  const promotions = [
+    {
+      id: 1,
+      name: '2+1 на утеплители',
+      type: 'bundle',
+      description: 'При покупке 2 упаковок утеплителя — третья в подарок',
+      discount: '33%',
+      validUntil: '2024-10-31',
+      status: 'active',
+      category: 'insulation',
+      used: 42,
+      revenue: 1250000,
+      conditions: 'Минимальный заказ от 50,000₽'
+    },
+    {
+      id: 2,
+      name: 'Скидка 20% на гидроизоляцию',
+      type: 'discount',
+      description: 'Специальная скидка на всю линейку ТЕХНОНИКОЛЬ',
+      discount: '20%',
+      validUntil: '2024-10-25',
+      status: 'active',
+      category: 'waterproofing',
+      used: 38,
+      revenue: 890000,
+      conditions: 'Для зарегистрированных клиентов'
+    },
+    {
+      id: 3,
+      name: 'Осенняя распродажа фасадов',
+      type: 'seasonal',
+      description: 'Сезонная распродажа фасадных систем',
+      discount: '15%',
+      validUntil: '2024-11-15',
+      status: 'active',
+      category: 'facade',
+      used: 26,
+      revenue: 645000,
+      conditions: 'До окончания сезона'
+    },
+    {
+      id: 4,
+      name: 'Комплект "Тёплый дом"',
+      type: 'bundle',
+      description: 'Утеплитель + гидроизоляция + пароизоляция со скидкой',
+      discount: '25%',
+      validUntil: '2024-11-30',
+      status: 'active',
+      category: 'insulation',
+      used: 31,
+      revenue: 1120000,
+      conditions: 'При покупке полного комплекта'
+    },
+    {
+      id: 5,
+      name: 'Бонусы за отзыв',
+      type: 'loyalty',
+      description: 'Получите 500 бонусов за фото объекта с нашими материалами',
+      discount: '500 баллов',
+      validUntil: '2024-12-31',
+      status: 'active',
+      category: 'all',
+      used: 67,
+      revenue: 0,
+      conditions: 'Опубликуйте отзыв с фото'
+    }
+  ];
+
+  const loyaltyTiers = [
+    { name: 'Серебро', minSpend: 0, maxSpend: 1500000, cashback: 1, discount: 3, color: 'bg-gray-400' },
+    { name: 'Золото', minSpend: 1500000, maxSpend: 3000000, cashback: 2, discount: 5, color: 'bg-yellow-500' },
+    { name: 'Платина', minSpend: 3000000, maxSpend: Infinity, cashback: 3, discount: 10, color: 'bg-blue-600' }
+  ];
+
+  const referralStats = [
+    { customer: 'ООО "СтройТех"', referrals: 8, revenue: 4200000, bonus: 126000, status: 'active' },
+    { customer: 'ООО "МонолитСтрой"', referrals: 5, revenue: 2850000, bonus: 85500, status: 'active' },
+    { customer: 'ИП Петров А.С.', referrals: 3, revenue: 1450000, bonus: 43500, status: 'active' }
+  ];
+
+  const emailCampaignsData = [
+    { id: 1, name: 'Осенние акции 2024', sent: 2847, opened: 1892, clicked: 456, conversions: 89, revenue: 1250000, date: '2024-10-15', status: 'completed' },
+    { id: 2, name: 'Новинки ROCKWOOL', sent: 1956, opened: 1234, clicked: 312, conversions: 62, revenue: 890000, date: '2024-10-12', status: 'completed' },
+    { id: 3, name: 'Персональные предложения', sent: 456, opened: 389, clicked: 178, conversions: 41, revenue: 645000, date: '2024-10-18', status: 'active' }
   ];
 
   const profitabilityData = [
@@ -1597,6 +1688,383 @@ const Index = () => {
                   </div>
                 </div>
               </Card>
+            </div>
+          ) : activeTab === 'marketing' ? (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-3xl font-bold text-primary">Маркетинг и лояльность</h2>
+                <Button className="bg-primary hover:bg-primary/90">
+                  <Icon name="Plus" size={20} className="mr-2" />
+                  Создать акцию
+                </Button>
+              </div>
+
+              <Tabs defaultValue="promotions" className="w-full">
+                <TabsList className="grid w-full grid-cols-4 mb-6">
+                  <TabsTrigger value="promotions">
+                    <Icon name="Tag" size={18} className="mr-2" />
+                    Акции
+                  </TabsTrigger>
+                  <TabsTrigger value="loyalty">
+                    <Icon name="Award" size={18} className="mr-2" />
+                    Программа лояльности
+                  </TabsTrigger>
+                  <TabsTrigger value="referral">
+                    <Icon name="Users" size={18} className="mr-2" />
+                    Реферальная система
+                  </TabsTrigger>
+                  <TabsTrigger value="campaigns">
+                    <Icon name="Mail" size={18} className="mr-2" />
+                    Email рассылки
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="promotions" className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <Card className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-orange-600 mb-1">Активные акции</p>
+                          <p className="text-3xl font-bold text-orange-700">{promotions.filter(p => p.status === 'active').length}</p>
+                        </div>
+                        <div className="w-12 h-12 bg-orange-200 rounded-xl flex items-center justify-center">
+                          <Icon name="Percent" size={24} className="text-orange-700" />
+                        </div>
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-blue-600 mb-1">Использовано промо</p>
+                          <p className="text-3xl font-bold text-blue-700">{promotions.reduce((sum, p) => sum + p.used, 0)}</p>
+                        </div>
+                        <div className="w-12 h-12 bg-blue-200 rounded-xl flex items-center justify-center">
+                          <Icon name="ShoppingCart" size={24} className="text-blue-700" />
+                        </div>
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-green-600 mb-1">Выручка по акциям</p>
+                          <p className="text-2xl font-bold text-green-700">₽{(promotions.reduce((sum, p) => sum + p.revenue, 0) / 1000000).toFixed(1)}М</p>
+                        </div>
+                        <div className="w-12 h-12 bg-green-200 rounded-xl flex items-center justify-center">
+                          <Icon name="TrendingUp" size={24} className="text-green-700" />
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+
+                  <div className="grid gap-4">
+                    {promotions.map((promo) => (
+                      <Card key={promo.id} className="p-6 hover:shadow-lg transition-shadow">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-xl font-bold text-primary">{promo.name}</h3>
+                              <Badge className="bg-orange-100 text-orange-700 border-orange-300">
+                                {promo.discount}
+                              </Badge>
+                              <Badge className="bg-green-100 text-green-700 border-green-300">
+                                <Icon name="CheckCircle" size={14} className="mr-1" />
+                                Активна
+                              </Badge>
+                            </div>
+                            <p className="text-gray-600 mb-3">{promo.description}</p>
+                            <div className="flex items-center gap-6 text-sm text-gray-500">
+                              <div className="flex items-center gap-1">
+                                <Icon name="Calendar" size={16} />
+                                <span>До {promo.validUntil}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Icon name="Users" size={16} />
+                                <span>Использовано: {promo.used} раз</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Icon name="DollarSign" size={16} />
+                                <span>Выручка: ₽{promo.revenue.toLocaleString()}</span>
+                              </div>
+                            </div>
+                            <p className="text-sm text-blue-600 mt-2">
+                              <Icon name="Info" size={14} className="inline mr-1" />
+                              {promo.conditions}
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button variant="outline" size="sm">
+                              <Icon name="Edit" size={16} className="mr-1" />
+                              Редактировать
+                            </Button>
+                            <Button variant="ghost" size="sm">
+                              <Icon name="BarChart3" size={16} />
+                            </Button>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="loyalty" className="space-y-4">
+                  <Card className="p-6 bg-gradient-to-br from-blue-600 to-blue-800 text-white mb-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-2xl font-bold mb-2">Программа лояльности BAUSTOV</h3>
+                        <p className="text-blue-100">Три уровня привилегий для постоянных клиентов</p>
+                      </div>
+                      <Icon name="Award" size={64} className="opacity-20" />
+                    </div>
+                  </Card>
+
+                  <div className="grid md:grid-cols-3 gap-6 mb-8">
+                    {loyaltyTiers.map((tier, index) => (
+                      <Card key={index} className={`p-6 border-2 ${index === 2 ? 'border-blue-600 shadow-lg scale-105' : 'border-gray-200'}`}>
+                        <div className={`w-16 h-16 ${tier.color} rounded-2xl flex items-center justify-center mb-4`}>
+                          <Icon name="Crown" size={32} className="text-white" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-primary mb-2">{tier.name}</h3>
+                        <p className="text-gray-600 text-sm mb-4">
+                          {tier.minSpend === 0 ? 'От начала' : `От ₽${(tier.minSpend / 1000000).toFixed(1)}М`}
+                          {tier.maxSpend !== Infinity ? ` до ₽${(tier.maxSpend / 1000000).toFixed(1)}М` : '+'}
+                        </p>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <span className="text-sm text-gray-700">Кэшбэк</span>
+                            <span className="font-bold text-green-600">{tier.cashback}%</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                            <span className="text-sm text-gray-700">Скидка</span>
+                            <span className="font-bold text-orange-600">{tier.discount}%</span>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+
+                  <h3 className="text-xl font-bold text-primary mb-4">Клиенты по уровням</h3>
+                  <div className="grid gap-3">
+                    {topCustomers.map((customer, index) => (
+                      <Card key={index} className="p-5 hover:shadow-md transition-shadow">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                              customer.tier === 'Платина' ? 'bg-blue-100' : 
+                              customer.tier === 'Золото' ? 'bg-yellow-100' : 'bg-gray-100'
+                            }`}>
+                              <Icon name="Building2" size={24} className={
+                                customer.tier === 'Платина' ? 'text-blue-600' : 
+                                customer.tier === 'Золото' ? 'text-yellow-600' : 'text-gray-600'
+                              } />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-primary">{customer.name}</h4>
+                              <p className="text-sm text-gray-600">Уровень: {customer.tier}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Icon name="Coins" size={16} className="text-orange-600" />
+                              <span className="font-bold text-lg text-orange-600">{customer.loyaltyPoints.toLocaleString()}</span>
+                              <span className="text-sm text-gray-500">баллов</span>
+                            </div>
+                            <p className="text-sm text-gray-600">
+                              Покупок на ₽{(customer.purchases / 1000000).toFixed(1)}М
+                            </p>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="referral" className="space-y-4">
+                  <Card className="p-6 bg-gradient-to-br from-purple-600 to-purple-800 text-white mb-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-2xl font-bold mb-2">Приведи друга — получи бонус</h3>
+                        <p className="text-purple-100">3% от первого заказа приведённого клиента</p>
+                      </div>
+                      <Icon name="UserPlus" size={64} className="opacity-20" />
+                    </div>
+                  </Card>
+
+                  <div className="grid md:grid-cols-3 gap-4 mb-6">
+                    <Card className="p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-indigo-600 mb-1">Всего рефералов</p>
+                          <p className="text-3xl font-bold text-indigo-700">{referralStats.reduce((sum, r) => sum + r.referrals, 0)}</p>
+                        </div>
+                        <Icon name="Users" size={28} className="text-indigo-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-green-600 mb-1">Выручка от рефералов</p>
+                          <p className="text-2xl font-bold text-green-700">₽{(referralStats.reduce((sum, r) => sum + r.revenue, 0) / 1000000).toFixed(1)}М</p>
+                        </div>
+                        <Icon name="TrendingUp" size={28} className="text-green-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-orange-600 mb-1">Выплачено бонусов</p>
+                          <p className="text-2xl font-bold text-orange-700">₽{(referralStats.reduce((sum, r) => sum + r.bonus, 0) / 1000).toFixed(0)}К</p>
+                        </div>
+                        <Icon name="Gift" size={28} className="text-orange-600" />
+                      </div>
+                    </Card>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-primary mb-4">Топ реферальщики</h3>
+                  <div className="grid gap-4">
+                    {referralStats.map((stat, index) => (
+                      <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center">
+                              <Icon name="Award" size={28} className="text-purple-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-primary text-lg mb-1">{stat.customer}</h4>
+                              <div className="flex items-center gap-4 text-sm text-gray-600">
+                                <span className="flex items-center gap-1">
+                                  <Icon name="Users" size={14} />
+                                  {stat.referrals} рефералов
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Icon name="DollarSign" size={14} />
+                                  Выручка: ₽{(stat.revenue / 1000000).toFixed(1)}М
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm text-gray-500 mb-1">Начислено бонусов</p>
+                            <p className="text-2xl font-bold text-green-600">₽{stat.bonus.toLocaleString()}</p>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+
+                  <Card className="p-6 bg-blue-50 border-blue-200 mt-6">
+                    <h4 className="font-bold text-primary mb-3 flex items-center gap-2">
+                      <Icon name="Info" size={20} />
+                      Как работает реферальная программа
+                    </h4>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li className="flex items-start gap-2">
+                        <Icon name="CheckCircle" size={16} className="text-green-600 mt-0.5" />
+                        <span>Клиент получает уникальную реферальную ссылку</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Icon name="CheckCircle" size={16} className="text-green-600 mt-0.5" />
+                        <span>Новый клиент переходит по ссылке и делает первый заказ</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Icon name="CheckCircle" size={16} className="text-green-600 mt-0.5" />
+                        <span>Реферал получает 3% от суммы первого заказа бонусами</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <Icon name="CheckCircle" size={16} className="text-green-600 mt-0.5" />
+                        <span>Новый клиент получает скидку 5% на первый заказ</span>
+                      </li>
+                    </ul>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="campaigns" className="space-y-4">
+                  <div className="grid md:grid-cols-3 gap-4 mb-6">
+                    <Card className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-blue-600 mb-1">Отправлено писем</p>
+                          <p className="text-3xl font-bold text-blue-700">{emailCampaignsData.reduce((sum, c) => sum + c.sent, 0).toLocaleString()}</p>
+                        </div>
+                        <Icon name="Send" size={28} className="text-blue-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-green-600 mb-1">Открываемость</p>
+                          <p className="text-3xl font-bold text-green-700">
+                            {((emailCampaignsData.reduce((sum, c) => sum + c.opened, 0) / emailCampaignsData.reduce((sum, c) => sum + c.sent, 0)) * 100).toFixed(1)}%
+                          </p>
+                        </div>
+                        <Icon name="Eye" size={28} className="text-green-600" />
+                      </div>
+                    </Card>
+                    <Card className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-purple-600 mb-1">Конверсия</p>
+                          <p className="text-3xl font-bold text-purple-700">
+                            {((emailCampaignsData.reduce((sum, c) => sum + c.conversions, 0) / emailCampaignsData.reduce((sum, c) => sum + c.sent, 0)) * 100).toFixed(1)}%
+                          </p>
+                        </div>
+                        <Icon name="Target" size={28} className="text-purple-600" />
+                      </div>
+                    </Card>
+                  </div>
+
+                  <div className="grid gap-4">
+                    {emailCampaignsData.map((campaign) => (
+                      <Card key={campaign.id} className="p-6 hover:shadow-lg transition-shadow">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-xl font-bold text-primary">{campaign.name}</h3>
+                              <Badge className={campaign.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}>
+                                {campaign.status === 'active' ? 'Активна' : 'Завершена'}
+                              </Badge>
+                            </div>
+                            <p className="text-sm text-gray-500">Отправлено: {campaign.date}</p>
+                          </div>
+                          <Button variant="outline" size="sm">
+                            <Icon name="Eye" size={16} className="mr-1" />
+                            Посмотреть
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-5 gap-4 text-center">
+                          <div>
+                            <p className="text-2xl font-bold text-blue-600">{campaign.sent}</p>
+                            <p className="text-xs text-gray-500">Отправлено</p>
+                          </div>
+                          <div>
+                            <p className="text-2xl font-bold text-green-600">{campaign.opened}</p>
+                            <p className="text-xs text-gray-500">Открыто</p>
+                            <p className="text-xs text-green-600">{((campaign.opened / campaign.sent) * 100).toFixed(1)}%</p>
+                          </div>
+                          <div>
+                            <p className="text-2xl font-bold text-purple-600">{campaign.clicked}</p>
+                            <p className="text-xs text-gray-500">Кликов</p>
+                            <p className="text-xs text-purple-600">{((campaign.clicked / campaign.sent) * 100).toFixed(1)}%</p>
+                          </div>
+                          <div>
+                            <p className="text-2xl font-bold text-orange-600">{campaign.conversions}</p>
+                            <p className="text-xs text-gray-500">Покупок</p>
+                            <p className="text-xs text-orange-600">{((campaign.conversions / campaign.sent) * 100).toFixed(1)}%</p>
+                          </div>
+                          <div>
+                            <p className="text-xl font-bold text-primary">₽{(campaign.revenue / 1000).toFixed(0)}К</p>
+                            <p className="text-xs text-gray-500">Выручка</p>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+
+                  <Button className="w-full bg-primary hover:bg-primary/90">
+                    <Icon name="Plus" size={20} className="mr-2" />
+                    Создать новую рассылку
+                  </Button>
+                </TabsContent>
+              </Tabs>
             </div>
           ) : (
             <>
