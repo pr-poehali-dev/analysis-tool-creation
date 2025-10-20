@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -43,6 +47,13 @@ const Index = () => {
   const [dateRange, setDateRange] = useState('7d');
   const [selectedRegion, setSelectedRegion] = useState('all');
   const [notifications, setNotifications] = useState(3);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<any>(null);
+  
+  const openModal = (content: any) => {
+    setModalContent(content);
+    setModalOpen(true);
+  };
 
   const menuItems = [
     { id: 'dashboard', label: 'Дашборд', icon: 'LayoutDashboard' },
@@ -127,10 +138,7 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 size="icon"
-                onClick={() => {
-                  alert('Обновление данных...');
-                  setTimeout(() => alert('Данные обновлены!'), 500);
-                }}
+                onClick={() => openModal({ type: 'refresh' })}
               >
                 <Icon name="RefreshCcw" size={18} />
               </Button>
@@ -141,7 +149,7 @@ const Index = () => {
                 className="relative"
                 onClick={() => {
                   setNotifications(0);
-                  alert('Уведомления:\n• Низкий запас цемента на складе №3\n• Новый заказ #ЗК-2850\n• Завершена отгрузка #ЗК-2842');
+                  openModal({ type: 'notifications' });
                 }}
               >
                 <Icon name="Bell" size={18} />
@@ -152,10 +160,7 @@ const Index = () => {
                 )}
               </Button>
               
-              <Button onClick={() => {
-                alert('Экспорт данных в Excel...');
-                setTimeout(() => alert('Файл "Баустов_Отчёт_" + dateRange + ".xlsx" загружен!'), 500);
-              }}>
+              <Button onClick={() => openModal({ type: 'export', dateRange })}>
                 <Icon name="Download" size={18} className="mr-2" />
                 Экспорт
               </Button>
@@ -173,7 +178,14 @@ const Index = () => {
                   borderLeftColor: index === 0 ? '#003d7a' : index === 1 ? '#ff7e1f' : index === 2 ? '#003d7a' : '#ff7e1f',
                   animationDelay: `${index * 100}ms`
                 }}
-                onClick={() => alert(`Детальная информация:\n\n${metric.title}\nТекущее значение: ${metric.value}\nИзменение: ${metric.change}\n\nНажмите для просмотра подробной статистики`)}
+                onClick={() => openModal({
+                  type: 'metric',
+                  title: metric.title,
+                  value: metric.value,
+                  change: metric.change,
+                  trend: metric.trend,
+                  icon: metric.icon
+                })}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
@@ -442,6 +454,289 @@ const Index = () => {
           </div>
         </div>
       </main>
+
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          {modalContent?.type === 'metric' && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <Icon name={modalContent.icon} size={24} className="text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold">{modalContent.title}</h3>
+                    <p className="text-sm text-muted-foreground font-normal">Детальная статистика</p>
+                  </div>
+                </DialogTitle>
+              </DialogHeader>
+              
+              <div className="space-y-6 mt-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <Card className="p-4 bg-primary/5">
+                    <p className="text-sm text-muted-foreground mb-1">Текущее значение</p>
+                    <p className="text-3xl font-bold text-primary">{modalContent.value}</p>
+                  </Card>
+                  <Card className="p-4 bg-secondary/5">
+                    <p className="text-sm text-muted-foreground mb-1">Изменение</p>
+                    <p className={`text-3xl font-bold ${modalContent.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                      {modalContent.change}
+                    </p>
+                  </Card>
+                </div>
+
+                <Separator />
+
+                <Tabs defaultValue="week" className="w-full">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="week">Неделя</TabsTrigger>
+                    <TabsTrigger value="month">Месяц</TabsTrigger>
+                    <TabsTrigger value="year">Год</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="week" className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                        <span className="text-sm">Понедельник</span>
+                        <Badge variant="outline">+2.3%</Badge>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                        <span className="text-sm">Вторник</span>
+                        <Badge variant="outline">+5.1%</Badge>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                        <span className="text-sm">Среда</span>
+                        <Badge variant="outline">+3.8%</Badge>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                        <span className="text-sm">Четверг</span>
+                        <Badge variant="outline">+1.9%</Badge>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                        <span className="text-sm">Пятница</span>
+                        <Badge variant="outline">+2.2%</Badge>
+                      </div>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="month" className="space-y-4">
+                    <p className="text-sm text-muted-foreground">Данные за последние 30 дней показывают стабильный рост показателя.</p>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-4 bg-muted/50 rounded-lg">
+                        <p className="text-xs text-muted-foreground mb-1">Неделя 1</p>
+                        <p className="text-xl font-bold">+4.2%</p>
+                      </div>
+                      <div className="p-4 bg-muted/50 rounded-lg">
+                        <p className="text-xs text-muted-foreground mb-1">Неделя 2</p>
+                        <p className="text-xl font-bold">+6.8%</p>
+                      </div>
+                      <div className="p-4 bg-muted/50 rounded-lg">
+                        <p className="text-xs text-muted-foreground mb-1">Неделя 3</p>
+                        <p className="text-xl font-bold">+3.5%</p>
+                      </div>
+                      <div className="p-4 bg-muted/50 rounded-lg">
+                        <p className="text-xs text-muted-foreground mb-1">Неделя 4</p>
+                        <p className="text-xl font-bold">+5.1%</p>
+                      </div>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="year" className="space-y-4">
+                    <p className="text-sm text-muted-foreground">Годовая динамика демонстрирует положительную тенденцию роста.</p>
+                    <div className="space-y-2">
+                      {['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт'].map((month, idx) => (
+                        <div key={month} className="flex justify-between items-center p-2 hover:bg-muted/50 rounded">
+                          <span className="text-sm">{month}</span>
+                          <span className="text-sm font-semibold text-green-600">+{(Math.random() * 10 + 2).toFixed(1)}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
+            </>
+          )}
+
+          {modalContent?.type === 'notifications' && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Icon name="Bell" size={24} className="text-primary" />
+                  Уведомления
+                </DialogTitle>
+                <DialogDescription>
+                  Важные события и обновления системы
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-3 mt-4">
+                <Card className="p-4 border-l-4 border-l-orange-500 bg-orange-50/50">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                      <Icon name="AlertTriangle" size={20} className="text-orange-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm">Низкий запас цемента на складе №3</p>
+                      <p className="text-xs text-muted-foreground mt-1">Осталось 45 тонн. Рекомендуется пополнить запас.</p>
+                      <p className="text-xs text-muted-foreground mt-2">15 минут назад</p>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4 border-l-4 border-l-blue-500 bg-blue-50/50">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                      <Icon name="ShoppingCart" size={20} className="text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm">Новый заказ #ЗК-2850</p>
+                      <p className="text-xs text-muted-foreground mt-1">Кирпич М150 - 280 тонн. Клиент: ООО "СтройТех"</p>
+                      <p className="text-xs text-muted-foreground mt-2">1 час назад</p>
+                    </div>
+                  </div>
+                </Card>
+
+                <Card className="p-4 border-l-4 border-l-green-500 bg-green-50/50">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                      <Icon name="CheckCircle" size={20} className="text-green-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-sm">Завершена отгрузка #ЗК-2842</p>
+                      <p className="text-xs text-muted-foreground mt-1">Арматура 12мм - 145 тонн успешно отгружена.</p>
+                      <p className="text-xs text-muted-foreground mt-2">3 часа назад</p>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            </>
+          )}
+
+          {modalContent?.type === 'export' && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Icon name="Download" size={24} className="text-primary" />
+                  Экспорт данных
+                </DialogTitle>
+                <DialogDescription>
+                  Выберите формат и параметры экспорта
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-4 mt-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <Button 
+                    variant="outline" 
+                    className="h-24 flex-col gap-2"
+                    onClick={() => {
+                      setModalOpen(false);
+                      setTimeout(() => alert(`Файл "Баустов_Отчёт_${modalContent.dateRange}.xlsx" загружен!`), 300);
+                    }}
+                  >
+                    <Icon name="FileSpreadsheet" size={32} className="text-green-600" />
+                    <span>Excel (.xlsx)</span>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-24 flex-col gap-2"
+                    onClick={() => {
+                      setModalOpen(false);
+                      setTimeout(() => alert(`Файл "Баустов_Отчёт_${modalContent.dateRange}.pdf" загружен!`), 300);
+                    }}
+                  >
+                    <Icon name="FileText" size={32} className="text-red-600" />
+                    <span>PDF (.pdf)</span>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-24 flex-col gap-2"
+                    onClick={() => {
+                      setModalOpen(false);
+                      setTimeout(() => alert(`Файл "Баустов_Отчёт_${modalContent.dateRange}.csv" загружен!`), 300);
+                    }}
+                  >
+                    <Icon name="Database" size={32} className="text-blue-600" />
+                    <span>CSV (.csv)</span>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-24 flex-col gap-2"
+                    onClick={() => {
+                      setModalOpen(false);
+                      setTimeout(() => alert(`Данные скопированы в буфер обмена!`), 300);
+                    }}
+                  >
+                    <Icon name="Copy" size={32} className="text-purple-600" />
+                    <span>Копировать</span>
+                  </Button>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-sm">Параметры экспорта</h4>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm">
+                      <input type="checkbox" defaultChecked className="rounded" />
+                      Включить графики
+                    </label>
+                    <label className="flex items-center gap-2 text-sm">
+                      <input type="checkbox" defaultChecked className="rounded" />
+                      Включить таблицы
+                    </label>
+                    <label className="flex items-center gap-2 text-sm">
+                      <input type="checkbox" className="rounded" />
+                      Включить прогнозы
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {modalContent?.type === 'refresh' && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Icon name="RefreshCcw" size={24} className="text-primary" />
+                  Обновление данных
+                </DialogTitle>
+              </DialogHeader>
+              
+              <div className="space-y-4 mt-4">
+                <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <Icon name="CheckCircle" size={24} className="text-green-600" />
+                  <div>
+                    <p className="font-semibold text-sm">Данные успешно обновлены</p>
+                    <p className="text-xs text-muted-foreground mt-1">Последнее обновление: только что</p>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                    <span className="text-sm">Метрики дашборда</span>
+                    <Icon name="Check" size={18} className="text-green-600" />
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                    <span className="text-sm">Графики и диаграммы</span>
+                    <Icon name="Check" size={18} className="text-green-600" />
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                    <span className="text-sm">Прогноз поставок</span>
+                    <Icon name="Check" size={18} className="text-green-600" />
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                    <span className="text-sm">История операций</span>
+                    <Icon name="Check" size={18} className="text-green-600" />
+                  </div>
+                </div>
+
+                <Button className="w-full" onClick={() => setModalOpen(false)}>
+                  Закрыть
+                </Button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
